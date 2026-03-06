@@ -236,14 +236,25 @@ module YARD
 
         def visit_event(node)
           map = @map[MAPPINGS[node.type]]
-          lstart, sstart = *(map ? map.pop : [lineno, @ns_charno - 1])
+
+          # Pattern matching and `in` syntax creates :case nodes without 'case' tokens,
+          # fall back to the first child node.
+          if node.type == :case && (!map || map.empty?) && (child_node = node[0])
+            lstart = child_node.line_range.first
+            sstart = child_node.source_range.first
+          else
+            lstart, sstart = *(map ? map.pop : [lineno, @ns_charno - 1])
+          end
+
+          raise "Cannot determine start of node #{node} around #{file}:#{lineno}" if lstart.nil? || sstart.nil?
+
           node.source_range = Range.new(sstart, @ns_charno - 1)
           node.line_range = Range.new(lstart, lineno)
           if node.respond_to?(:block)
             sr = node.block.source_range
             lr = node.block.line_range
-            node.block.source_range = Range.new(sr.first, @tokens.last[2][1] - 1)
-            node.block.line_range = Range.new(lr.first, @tokens.last[2][0])
+            node.block.source_range = Range.new(sr.begin, @tokens.last[2][1] - 1)
+            node.block.line_range = Range.new(lr.begin, @tokens.last[2][0])
           end
           node
         end
@@ -259,7 +270,10 @@ module YARD
         def visit_ns_token(token, data, ast_token = false)
           add_token(token, data)
           ch = charno
-          @last_ns_token = [token, data]
+
+          # For purposes of tracking parsing state, don't treat keywords as such
+          # where used as a symbol identifier.
+          @last_ns_token = [@last_ns_token && @last_ns_token.first == :symbeg ? :symbol : token, data]
           @charno += data.length
           @ns_charno = charno
           @newline = [:semicolon, :comment, :kw, :op, :lparen, :lbrace].include?(token)
@@ -272,14 +286,14 @@ module YARD
           if @percent_ary
             if token == :words_sep && data !~ /\s\z/
               rng = @percent_ary.source_range
-              rng = Range.new(rng.first, rng.last + data.length)
+              rng = Range.new(rng.begin, rng.end.to_i + data.length)
               @percent_ary.source_range = rng
               @tokens << [token, data, [lineno, charno]]
               @percent_ary = nil
               return
             elsif token == :tstring_end && data =~ /\A\s/
               rng = @percent_ary.source_range
-              rng = Range.new(rng.first, rng.last + data.length)
+              rng = Range.new(rng.begin, rng.end.to_i + data.length)
               @percent_ary.source_range = rng
               @tokens << [token, data, [lineno, charno]]
               @percent_ary = nil
@@ -377,20 +391,22 @@ module YARD
         def on_aref(*args)
           @map[:lbracket].pop
           ll, lc = *@map[:aref].shift
-          sr = args.first.source_range.first..lc
-          lr = args.first.line_range.first..ll
+          sr = args.first.source_range.begin..lc
+          lr = args.first.line_range.begin..ll
           AstNode.new(:aref, args, :char => sr, :line => lr)
         end
 
         def on_aref_field(*args)
           @map[:lbracket].pop
-          AstNode.new(:aref_field, args,
-                      :listline => lineno..lineno, :listchar => charno...charno)
+          ll, lc = *@map[:aref].shift
+          sr = args.first.source_range.begin..lc
+          lr = args.first.line_range.begin..ll
+          AstNode.new(:aref_field, args, :char => sr, :line => lr)
         end
 
         def on_array(other)
           node = AstNode.node_class_for(:array).new(:array, [other])
-          map = @map[MAPPINGS[node.type]]
+          map = @map[MAPPINGS[node.type]] if other.nil? || other.type == :list
           if map && !map.empty?
             lstart, sstart = *map.pop
             node.source_range = Range.new(sstart, @ns_charno - 1)
@@ -449,8 +465,8 @@ module YARD
             def on_#{kw}(*args)
               mapping = @map[#{kw.to_s.sub(/_mod$/, '').inspect}]
               mapping.pop if mapping
-              sr = args.last.source_range.first..args.first.source_range.last
-              lr = args.last.line_range.first..args.first.line_range.last
+              sr = args.last.source_range.begin..args.first.source_range.end
+              lr = args.last.line_range.begin..args.first.line_range.end
               #{node_class}.new(:#{kw}, args, :line => lr, :char => sr)
             end
           eof
@@ -473,8 +489,8 @@ module YARD
             begin; undef on_#{kw}_add; rescue NameError; end
             def on_#{kw}_add(list, item)
               last = @source[@ns_charno,1] == "\n" ? @ns_charno - 1 : @ns_charno
-              list.source_range = (list.source_range.first..last)
-              list.line_range = (list.line_range.first..lineno)
+              list.source_range = (list.source_range.begin..last)
+              list.line_range = (list.line_range.begin..lineno)
               list.push(item)
               list
             end
@@ -485,9 +501,9 @@ module YARD
           node = visit_event_arr(LiteralNode.new(:string_literal, args))
           if args.size == 1
             r = args[0].source_range
-            if node.source_range != Range.new(r.first - 1, r.last + 1)
+            if node.source_range != Range.new(r.begin - 1, r.end + 1)
               klass = AstNode.node_class_for(node[0].type)
-              r = Range.new(node.source_range.first + 1, node.source_range.last - 1)
+              r = Range.new(node.source_range.begin + 1, node.source_range.end - 1)
               node[0] = klass.new(node[0].type, [@source[r]], :line => node.line_range, :char => r)
             end
           end
@@ -573,7 +589,7 @@ module YARD
             @comments_flags[lineno] = @comments_flags[lineno - 1]
             @comments_flags.delete(lineno - 1)
             range = @comments_range.delete(lineno - 1)
-            source_range = range.first..source_range.last
+            source_range = range.begin..source_range.end
             comment = append_comment + "\n" + comment
           end
 
@@ -627,11 +643,13 @@ module YARD
             end
 
             # check upwards from line before node; check node's line at the end
-            ((node.line - 1).downto(node.line - 2).to_a + [node.line]).each do |line|
-              comment = @comments[line]
-              if comment && !comment.empty?
-                add_comment(line, node)
-                break
+            if (n_l = node.line)
+              ((n_l - 1).downto(n_l - 2).to_a + [n_l]).each do |line|
+                comment = @comments[line]
+                if comment && !comment.empty?
+                  add_comment(line, node)
+                  break
+                end
               end
             end
 
@@ -655,6 +673,23 @@ module YARD
               add_comment(line, nil, pick, true) if pick
             end
           end unless @comments.empty?
+
+          # Attach comments that fall within an otherwise empty
+          # class or module body. Without this step, a comment used
+          # solely for directives (like @!method) would be treated as
+          # a top-level comment and its directives would not be scoped
+          # to the namespace.
+          unless @comments.empty?
+            root.traverse do |node|
+              next unless [:class, :module, :sclass].include?(node.type)
+              body = node.children.last
+              next unless body && body.type == :list && body.empty?
+              @comments.keys.each do |line|
+                next unless node.line_range.include?(line)
+                add_comment(line, nil, body, true)
+              end
+            end
+          end
 
           # insert all remaining comments
           @comments.each do |line, _comment|

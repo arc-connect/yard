@@ -122,12 +122,19 @@ HTML. If running `which rdoc` turns up empty, install RDoc by issuing:
 $ sudo apt-get install rdoc
 ```
 
+### Markdown parser
+
+When rendering markdown, yard will use one of several possible markdown providers,
+[in order of priority](https://github.com/lsegal/yard/blob/e833aac7a01510245dd4ae1d1d18b046c8293c2d/lib/yard/templates/helpers/markup_helper.rb#L26-L33).
+If you are experiencing rendering bugs (example [1](https://github.com/lsegal/yard/issues/1410) [2](https://github.com/lsegal/yard/issues/1543)), try adding one of the
+gems further up in the list to your Gemfile.
+
 ## Usage
 
 There are a couple of ways to use YARD. The first is via command-line, and the
 second is the Rake task.
 
-**1. yard Command-line Tool**
+### 1. yard Command-line Tool
 
 YARD comes packaged with a executable named `yard` which can control the many
 functions of YARD, including generating documentation, graphs running the YARD
@@ -140,7 +147,7 @@ $ yard --help
 Plugins can also add commands to the `yard` executable to provide extra
 functionality.
 
-### Generating Documentation
+#### Generating Documentation
 
 <span class="note">The `yardoc` executable is a shortcut for `yard doc`.</span>
 
@@ -185,9 +192,9 @@ Note that the README file can be specified with its own `--readme` switch.
 You can also add a `.yardopts` file to your project directory which lists the
 switches separated by whitespace (newlines or space) to pass to yardoc whenever
 it is run. A full overview of the `.yardopts` file can be found in
-{YARD::CLI::Yardoc}.
+[YARD::CLI::Yardoc](https://rubydoc.info/gems/yard/YARD/CLI/Yardoc#label-Options+File+-28.yardopts-29).
 
-### Queries
+#### Queries
 
 The `yardoc` tool also supports a `--query` argument to only include objects
 that match a certain data or meta-data query. The query syntax is Ruby, though a
@@ -214,7 +221,7 @@ following two lines both check for the existence of a return and param tag:
 
 For more information about the query syntax, see the {YARD::Verifier} class.
 
-**2. Rake Task**
+### 2. Rake Task
 
 The second most obvious is to generate docs via a Rake task. You can do this by
 adding the following to your `Rakefile`:
@@ -240,7 +247,7 @@ environment variable:
 $ rake yard OPTS='--any --extra --opts'
 ```
 
-**3. `yri` RI Implementation**
+### 3. `yri` RI Implementation
 
 The yri binary will use the cached .yardoc database to give you quick ri-style
 access to your documentation. It's way faster than ri but currently does not
@@ -264,7 +271,7 @@ $ yard gems
 If you don't have sudo access, it will write these files to your `~/.yard`
 directory. `yri` will also cache lookups there.
 
-**4. `yard server` Documentation Server**
+### 4. `yard server` Documentation Server
 
 The `yard server` command serves documentation for a local project or all
 installed RubyGems. To serve documentation for a project you are working on,
@@ -278,14 +285,14 @@ And the project inside the current directory will be parsed (if the source has
 not yet been scanned by YARD) and served at
 [http://localhost:8808](http://localhost:8808).
 
-### Live Reloading
+#### Live Reloading
 
 If you want to serve documentation on a project while you document it so that
 you can preview the results, simply pass `--reload` (`-r`) to the above command
 and YARD will reload any changed files on each request. This will allow you to
 change any documentation in the source and refresh to see the new contents.
 
-### Serving Gems
+#### Serving Gems
 
 To serve documentation for all installed gems, call:
 
@@ -297,7 +304,7 @@ This will also automatically build documentation for any gems that have not been
 previously scanned. Note that in this case there will be a slight delay between
 the first request of a newly parsed gem.
 
-**5. `yard graph` Graphviz Generator**
+### 5. `yard graph` Graphviz Generator
 
 You can use `yard graph` to generate dot graphs of your code. This, of course,
 requires [Graphviz](http://www.graphviz.org) and the `dot` binary. By default

@@ -13,10 +13,23 @@ class YARD::Handlers::Ruby::VisibilityHandler < YARD::Handlers::Ruby::Base
     case statement.type
     when :var_ref, :vcall
       self.visibility = ident.first.to_sym
-    when :fcall, :command
+      globals.visibility_origin = :keyword
+    when :command
+      if RUBY_VERSION >= '3.' && is_attribute_method?(statement.parameters.first)
+        parse_block(statement.parameters.first, visibility: ident.first.to_sym)
+        return
+      end
+      process_decorator do |method|
+        method.visibility = ident.first if method.respond_to? :visibility=
+      end
+    when :fcall
       process_decorator do |method|
         method.visibility = ident.first if method.respond_to? :visibility=
       end
     end
+  end
+
+  def is_attribute_method?(node)
+    node.type == :command && node.jump(:ident).first.to_s =~ /^attr_(accessor|writer|reader)$/
   end
 end

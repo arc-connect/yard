@@ -1,5 +1,9 @@
 # frozen_string_literal: true
-require 'cgi'
+if RUBY_VERSION < '3.5'
+  require 'cgi/util'
+else
+  require 'cgi/escape'
+end
 
 module YARD
   module Templates::Helpers
@@ -224,7 +228,7 @@ module YARD
       # @return [String] HTML with linkified references
       def resolve_links(text)
         code_tags = 0
-        text.gsub(%r{<(/)?(pre|code|tt)|(\\|!)?\{(?!\})(\S+?)(?:\s([^\}]*?\S))?\}(?=[\W<]|.+</|$)}m) do |str|
+        text.gsub(%r{<(/)?(pre|code|tt)|(\\|!)?\{(?!\})(\S+?)(?:\s([^\}]*?\S))?\}(?=\W|.+</|$)}m) do |str|
           closed = $1
           tag = $2
           escape = $3

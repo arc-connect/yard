@@ -23,6 +23,7 @@ module YARD
       attr_accessor :types
 
       # @return [String] a name associated with the tag
+      # @return [nil] if no tag name is supplied
       attr_accessor :name
 
       # @return [CodeObjects::Base] the associated object
@@ -37,7 +38,7 @@ module YARD
       # +raise+, etc.
       #
       # @param [#to_s] tag_name        the tag name to create the tag for
-      # @param [String] text           the descriptive text for this tag
+      # @param [String, nil] text      the descriptive text for this tag, or nil if none provided
       # @param [Array<String>] types   optional type list of formally declared types
       #                                for the tag
       # @param [String] name           optional key name which the tag refers to

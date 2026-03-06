@@ -1,5 +1,37 @@
 # main
 
+# [0.9.38] - December 5th, 2025
+
+[0.9.38]: https://github.com/lsegal/yard/compare/v0.9.37...v0.9.38
+
+- Add support for complex constant assignment (#1599)
+- Add support for Data type structs (#1600)
+- Support multi method duck type syntax in type explainer (#1631)
+- Improve Ruby 3.5 compatibility (#1616)
+- Update documentation for various type annotations (#1615)
+- JavaScript frontend updates (resizer, JS bugs, reduce console verbosity) for default template
+- Fix beginless/endless range errors (#1549, #1625)
+- Fix path structure in Templates.md documentation (#1588)
+- Fix signature handling in overload (#1590)
+- Fix handling of **nil with named block (#1623)
+- Fix directives in empty class bodies (#1624)
+- Fix parsing of array within array syntax (#1604)
+- Fix parsing of visibility keywords in front of class methods (#1632)
+
+# [0.9.37] - September 4th, 2024
+
+[0.9.37]: https://github.com/lsegal/yard/compare/v0.9.36...v0.9.37
+
+- Fix JavaScript errors in `--one-file` template (#1426)
+- Fix heredoc parsing and add support for squiggly heredocs (#1315, #1495)
+- Accessibility improvements to the default template (#1501)
+- Improved YARD documentation (#1410, #1512, #1516, #1544)
+- Fix error when parsing `@option` tags (#1515)
+- Fix issue parsing UTF-8 filenames (#1517)
+- Replace OpenStruct with optimized YARD::OpenStruct to avoid ostruct performance warnings (#1545)
+- Add support for `private attr_*` syntax (#1541)
+- Remove logger dependency (#1546)
+
 # [0.9.36] - February 29th, 2024
 
 [0.9.36]: https://github.com/lsegal/yard/compare/v0.9.35...v0.9.36

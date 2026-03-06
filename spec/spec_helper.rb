@@ -27,7 +27,7 @@ end
 begin
   require 'coveralls'
   Coveralls.wear!
-end if ENV['CI'] && HAVE_RIPPER
+end if ENV['CI'] && HAVE_RIPPER && RUBY_VERSION >= '2.5.0'
 
 NAMED_OPTIONAL_ARGUMENTS = RUBY_VERSION >= '2.1.0'
 
@@ -103,7 +103,11 @@ def docspec(objname = self.class.description, klass = self.class.described_type)
 end
 
 module Kernel
-  require 'cgi'
+  if RUBY_VERSION < '3.5'
+    require 'cgi/util'
+  else
+    require 'cgi/escape'
+  end
 
   def p(*args)
     puts args.map {|arg| CGI.escapeHTML(arg.inspect) }.join("<br/>\n")
@@ -210,6 +214,11 @@ RSpec.configure do |config|
   # as the one that triggered the failure.
   Kernel.srand config.seed
 end
+
+# Needed before including YARD to avoid a Logger load conflict because of the `include YARD` line
+begin
+  require 'asciidoctor'
+rescue LoadError; end
 
 YARD::Logger
 include YARD

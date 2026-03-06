@@ -283,6 +283,11 @@ eof
         src = "%#{tok}{\na b c\n d e f\n}"
         expect(stmt(src).source).to eq src
       end
+
+      it "shows proper source for %#{tok}[] array" do
+        src = "%#{tok}[\na b c\n d e f\n]"
+        expect(stmt(src).source).to eq src
+      end
     end
 
     {'i' => :qsymbols_literal, 'I' => :symbols_literal,
@@ -297,6 +302,33 @@ eof
         ].each do |str|
           node = stmt(str).jump(sym)
           expect(node.source).to eq(str[/(\%#{id}\(.+\))/m, 1])
+        end
+      end
+
+      it "parses %#{id}{...} literals" do
+        [
+          "TEST = %#{id}{A B C}",
+          "TEST = %#{id}{  A  B  C  }",
+          "TEST = %#{id}{ \nA \nB \nC \n}",
+          "TEST = %#{id}{\n\nAD\n\nB\n\nC\n\n}",
+          "TEST = %#{id}{\n A\n B\n C\n }",
+        ].each do |str|
+          node = stmt(str).jump(sym)
+          expect(node.source).to eq(str[/(\%#{id}\{.+\})/m, 1])
+        end
+      end
+
+      it "parses %#{id}[...] literals" do
+        [
+          "TEST = %#{id}[A B C]",
+          "TEST = %#{id}[  A  B  C  ]",
+          "TEST = %#{id}[ \nA \nB \nC \n]",
+          "TEST = %#{id}[\n\nAD\n\nB\n\nC\n\n]",
+          "TEST = %#{id}[\n A\n B\n C\n ]",
+          "TEST = %#{id}[\n  A]",
+        ].each do |str|
+          node = stmt(str).jump(sym)
+          expect(node.source).to eq(str[/(\%#{id}\[.+\])/m, 1])
         end
       end
 
@@ -327,7 +359,7 @@ eof
           # Method comment not docstring
         end
       eof
-      
+
       tokens = tokenize(src.gsub(/^ +/, ''))
       expect(tokens).to eq(tokens.sort_by {|t| t.last })
       expect(tokens.map {|t| t.first }).to eq %i(kw sp ident nl comment kw nl)
@@ -368,6 +400,27 @@ eof
         end
       eof
       expect(s.jump(:array).source).to eq "['foo', 'bar']"
+    end
+
+    it "parses [[]] as array of arrays" do
+      s = stmt(<<-eof)
+        class Foo
+          FOO = [['foo', 'bar']]
+        end
+      eof
+      expect(s.jump(:array).source).to eq "[['foo', 'bar']]"
+    end
+
+    it "parses %w() array inside another empty array" do
+      s = stmts(<<-eof)
+        FOO = [%w( foo bar )]
+      eof
+      expect(s[0].jump(:array).source).to eq '[%w( foo bar )]'
+    end
+
+    it "parses %w() array inside another populated array" do
+      s = stmts("FOO = ['1', %w[]]")
+      expect(s[0].jump(:array).source).to eq "['1', %w[]]"
     end
 
     it "shows source for unary minus" do
@@ -553,5 +606,151 @@ eof
 
       expect(Registry.at('A#add').docstring).to eq('Adds two numbers')
     end if RUBY_VERSION >= '3.'
+
+    it "doesn't crash with pattern matching following a case statement" do
+      code = <<-RUBY
+case value
+when 1
+  "number"
+end
+
+{} => {}
+      RUBY
+
+      expect {
+        YARD::Parser::Ruby::RubyParser.new(code, nil).parse
+      }.not_to raise_error
+    end if RUBY_VERSION >= '3.'
+
+    it "doesn't crash with `next` following `:def` symbol after initial `next`" do
+      code = <<-RUBY
+foo do
+  next
+  if :def
+    next
+  end
+end
+      RUBY
+
+      expect {
+        YARD::Parser::Ruby::RubyParser.new(code, nil).parse
+      }.not_to raise_error
+    end
+
+    it "doesn't crash with mixed pattern matching syntaxes" do
+      code = <<-RUBY
+case foo
+in bar
+  return
+end
+return if foo && foo in []
+      RUBY
+
+      expect {
+        parser = YARD::Parser::Ruby::RubyParser.new(code, nil)
+        parser.parse
+      }.not_to raise_error
+    end if RUBY_VERSION >= '2.7'
+
+    it "provides correct range for various pattern matching statements" do
+      patterns = [
+        "{} => {}",
+        "{a: 1} => {b: 2}",
+        "{x: 'test'} => result",
+        "foo in []"
+      ]
+
+      patterns.each do |pattern|
+        parser = YARD::Parser::Ruby::RubyParser.new(pattern, nil)
+        ast = parser.parse.root
+
+        case_node = nil
+        ast.traverse do |node|
+          if node.type == :case
+            case_node = node
+            break
+          end
+        end
+
+        expect(case_node).not_to be_nil, "Pattern #{pattern} should create a case node"
+        actual_text = pattern[case_node.source_range]
+        expect(actual_text).to eq(pattern),
+          "Pattern #{pattern} should have source range covering the full expression, got #{actual_text.inspect}"
+      end
+    end if RUBY_VERSION >= '3.'
+
+    it "provides correct range for `next` statement following `def` _symbol_" do
+      code = <<-RUBY
+foo do
+  if :def
+    next
+  end
+end
+      RUBY
+
+      parser = YARD::Parser::Ruby::RubyParser.new(code, nil)
+      ast = parser.parse.root
+
+      next_node = nil
+      ast.traverse do |node|
+        if node.type == :next
+          next_node = node
+          break
+        end
+      end
+
+      expect(next_node.line_range).to eq(3..3)
+      expect(code[next_node.source_range]).to eq('next')
+    end
+
+    # @bug gh-1420
+    it "parses constant assignment with aref after aref assignment correctly" do
+      code = <<-RUBY
+module Foo
+  a = {}
+
+  # Earlier assignment
+  a[:b] = 1
+
+  # This constant fails to parse correctly
+  X = a[:b]
+end
+      RUBY
+
+      parser = YARD::Parser::Ruby::RubyParser.new(code, nil)
+      ast = parser.parse.root
+
+      # Find the constant assignment node (X = a[:b])
+      assign_node = nil
+      ast.traverse do |node|
+        if node.type == :assign
+          # Check if it's a constant assignment (X = a[:b])
+          # Structure: assign[0] = var_field containing const "X"
+          #           assign[1] = aref node (a[:b])
+          lhs = node[0]
+          rhs = node[1]
+          if lhs && lhs.type == :var_field && lhs[0] && lhs[0].type == :const &&
+             (lhs[0][0] == "X" || lhs[0][0] == :X) && rhs && rhs.type == :aref
+            assign_node = node
+            break
+          end
+        end
+      end
+
+      expect(assign_node).not_to be_nil, "Should find constant assignment X = a[:b]"
+
+      # Check that the aref node (a[:b]) has a valid source_range
+      # The bug causes the ending position to be less than the beginning position
+      aref_node = assign_node[1]
+      expect(aref_node.type).to eq :aref
+      expect(aref_node.source_range).not_to be_nil
+      expect(aref_node.source_range.end).to be >= aref_node.source_range.begin,
+        "aref node source_range should be valid (ending >= beginning), got #{aref_node.source_range.inspect}. " \
+        "This indicates the parser got confused by the previous aref assignment."
+
+      # Verify the source can be extracted correctly
+      extracted_source = code[aref_node.source_range]
+      expect(extracted_source).to eq "a[:b]"
+    end
   end
 end if HAVE_RIPPER

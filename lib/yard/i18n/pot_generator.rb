@@ -60,7 +60,7 @@ module YARD
     #   File.open(po_file_path, "w") do |pot_file|
     #     pot_file.print(pot)
     #   end
-    # @see http://www.gnu.org/software/gettext/manual/html_node/PO-Files.html
+    # @see https://www.gnu.org/software/gettext/manual/html_node/PO-Files.html
     #   GNU gettext manual about details of PO file
     class PotGenerator
       # Extracted messages.

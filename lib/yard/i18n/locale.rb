@@ -24,7 +24,7 @@ module YARD
 
       # @return [String] the name of the locale. It used IETF language
       #   tag format +[language[_territory][.codeset][@modifier]]+.
-      # @see http://tools.ietf.org/rfc/bcp/bcp47.txt
+      # @see https://tools.ietf.org/rfc/bcp/bcp47.txt
       #   BCP 47 - Tags for Identifying Languages
       attr_reader :name
 

@@ -93,4 +93,20 @@ RSpec.describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}Attribut
   it "maintains visibility for attr_reader" do
     expect(Registry.at('D#parser').visibility).to eq :protected
   end
+
+  it "stores attribute under class scope when @!scope class directive is used with singleton_class.attr_reader" do
+    YARD.parse_string <<-RUBY
+      class ScopeTest
+        # @!scope class
+        singleton_class.attr_reader :bar
+      end
+    RUBY
+    klass = Registry.at('ScopeTest')
+    expect(klass.class_attributes[:bar]).not_to be_nil
+    expect(klass.class_attributes[:bar][:read]).to eq Registry.at('ScopeTest.bar')
+    method = Registry.at('ScopeTest.bar')
+    expect(method).not_to be_nil
+    expect(method.scope).to eq :class
+    expect(method.attr_info).not_to be_nil
+  end
 end

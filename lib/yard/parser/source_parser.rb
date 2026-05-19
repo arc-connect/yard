@@ -67,7 +67,7 @@ module YARD
 
       # The default glob of files to be parsed.
       # @since 0.9.0
-      DEFAULT_PATH_GLOB = ["{lib,app}/**/*.rb", "ext/**/*.{c,cc,cxx,cpp,rb}"]
+      DEFAULT_PATH_GLOB = ["{lib,app}/**/*.{rb,rbs}", "sig/**/*.rbs", "ext/**/*.{c,cc,cxx,cpp,rb}"]
 
       # Byte order marks for various encodings
       # @since 0.7.0
@@ -105,7 +105,7 @@ module YARD
             end
           end
           files = [paths].flatten.
-            map {|p| File.directory?(p) ? "#{p}/**/*.{rb,c,cc,cxx,cpp}" : p }.
+            map {|p| File.directory?(p) ? "#{p}/**/*.{rb,rbs,c,cc,cxx,cpp}" : p }.
             map {|p| p.include?("*") ? Dir[p].sort_by {|d| [d.length, d] } : p }.flatten.
             reject {|p| !File.file?(p) || excluded.any? {|re| p =~ re } }.
             map {|p| p.encoding == Encoding.default_external ? p : p.dup.force_encoding(Encoding.default_external) }
@@ -379,6 +379,7 @@ module YARD
       register_parser_type :ruby,   Ruby::RubyParser
       register_parser_type :ruby18, Ruby::Legacy::RubyParser
       register_parser_type :c,      C::CParser, ['c', 'cc', 'cxx', 'cpp']
+      register_parser_type :rbs,    RBS::RbsParser, ['rbs']
 
       self.parser_type = :ruby
 

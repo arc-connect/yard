@@ -2,17 +2,17 @@
 source 'https://rubygems.org'
 
 group :development do
-  gem 'rspec', '>= 3.11.0'
+  gem 'rspec'
   gem 'rake'
-  gem 'rdoc', '= 6.1.2.1'
+  gem 'rdoc', RUBY_VERSION < '2.7.0' ? '~> 6.0' : nil
   gem 'json'
-  gem 'simplecov'
-  gem 'samus', '~> 3.0.9', :require => false
-  gem 'coveralls_reborn', :require => false
+  gem 'simplecov' if RUBY_VERSION >= '2.7.0'
+  gem 'coveralls_reborn', :require => false if RUBY_VERSION >= '2.7.0'
   gem 'webrick'
 end
 
 group :asciidoc do
+  gem 'logger' if RUBY_VERSION >= '2.3.0'
   gem 'asciidoctor'
 end
 
@@ -26,7 +26,8 @@ group :textile do
 end
 
 group :server do
-  gem 'rack', '~> 2.0'
+  gem 'rackup' if RUBY_VERSION >= '2.6.0'
+  gem 'rack', '~> 2.0' if RUBY_VERSION < '2.6.0'
 end
 
 group :i18n do

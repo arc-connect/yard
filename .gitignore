@@ -10,5 +10,6 @@ Gemfile.lock
 /doc_guide
 /coverage
 /.bundle
+/tmp
 /vendor
 spec/examples.txt

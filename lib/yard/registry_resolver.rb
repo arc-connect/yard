@@ -75,6 +75,13 @@ module YARD
       lexical_lookup = 0
       while namespace && !resolved
         resolved = lookup_path_direct(namespace, path, type)
+        # Prevent a bare name from resolving back to the namespace we started
+        # from when searching through a parent namespace. For example,
+        # `include Enumerable` inside `A::Enumerable` would walk up to namespace
+        # `A` and match `A::Enumerable`, creating a false self-referential mixin.
+        # Only skip when we have already moved to a parent (namespace != orignamespace).
+        # See https://github.com/lsegal/yard/issues/1116
+        resolved = nil if resolved.equal?(orignamespace) && !namespace.equal?(orignamespace)
         resolved ||= lookup_path_inherited(namespace, path, type) if inheritance
         break if resolved
         namespace = namespace.parent

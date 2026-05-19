@@ -8,7 +8,7 @@ See Also:
 ---------
 
     - A
-    - http://example.com - Example
+    - https://example.com - Example
 
 Author:
 -------

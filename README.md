@@ -1,10 +1,10 @@
 # YARD: Yay! A Ruby Documentation Tool
 
-[![Homepage](https://img.shields.io/badge/home-yardoc.org-blue.svg)](http://yardoc.org)
-[![GitHub](https://img.shields.io/badge/github-lsegal/yard-blue.svg)](http://github.com/lsegal/yard)
-[![Documentation](https://img.shields.io/badge/docs-rdoc.info-blue.svg)](http://rubydoc.org/gems/yard/frames)
+[![Homepage](https://img.shields.io/badge/home-yardoc.org-blue.svg)](https://yardoc.org)
+[![GitHub](https://img.shields.io/badge/github-lsegal/yard-blue.svg)](https://github.com/lsegal/yard)
+[![Documentation](https://img.shields.io/badge/docs-rdoc.info-blue.svg)](https://rubydoc.org/gems/yard/frames)
 
-[![Gem Version](https://badge.fury.io/rb/yard.svg)](http://github.com/lsegal/yard/releases)
+[![Gem Version](https://badge.fury.io/rb/yard.svg)](https://github.com/lsegal/yard/releases)
 [![Unit Tests](https://github.com/lsegal/yard/actions/workflows/ci.yml/badge.svg)](https://github.com/lsegal/yard/actions/workflows/ci.yml)
 [![Coverage Status](https://coveralls.io/repos/github/lsegal/yard/badge.svg)](https://coveralls.io/github/lsegal/yard)
 [![License](https://img.shields.io/badge/license-MIT-yellowgreen.svg)](#license)
@@ -19,10 +19,10 @@ summary of some of YARD's notable features.
 
 ## Feature List
 
-**1. RDoc/SimpleMarkup Formatting Compatibility**: YARD is made to be compatible
-with RDoc formatting. In fact, YARD does no processing on RDoc documentation
-strings, and leaves this up to the output generation tool to decide how to
-render the documentation.
+**1. Builtin RDoc/Markdown Hybrid Support**: YARD ships with a builtin markup
+renderer that supports both RDoc and Markdown formatting out of the box—no
+external gem required. You can freely mix RDoc-style and Markdown-style
+documentation without installing any additional libraries.
 
 **2. Yardoc Meta-tag Formatting Like Python, Java, Objective-C and other
 languages**: YARD uses a '@tag' style definition syntax for meta tags alongside
@@ -114,20 +114,17 @@ $ gem install yard
 Alternatively, if you've checked the source out directly, you can call
 `rake install` from the root project directory.
 
-**Important Note for Debian/Ubuntu users:** there's a possible chance your Ruby
-install lacks RDoc, which is occasionally used by YARD to convert markup to
-HTML. If running `which rdoc` turns up empty, install RDoc by issuing:
+### Markup rendering
 
-```sh
-$ sudo apt-get install rdoc
-```
+YARD includes a builtin renderer that handles both RDoc and Markdown markup
+types without any external dependencies. To switch the default markup type,
+pass `-m markdown` (or `-m rdoc`) to `yard doc`, or add it to your `.yardopts`
+file.
 
-### Markdown parser
-
-When rendering markdown, yard will use one of several possible markdown providers,
-[in order of priority](https://github.com/lsegal/yard/blob/e833aac7a01510245dd4ae1d1d18b046c8293c2d/lib/yard/templates/helpers/markup_helper.rb#L26-L33).
-If you are experiencing rendering bugs (example [1](https://github.com/lsegal/yard/issues/1410) [2](https://github.com/lsegal/yard/issues/1543)), try adding one of the
-gems further up in the list to your Gemfile.
+For optional extra rendering features (e.g. GitHub-Flavoured Markdown fenced
+code blocks, tables, or specific Markdown extensions), you can install an
+additional provider gem such as `redcarpet`, `commonmarker`, or `kramdown` and
+select it explicitly with `-M PROVIDER` (e.g. `yard doc -m markdown -M redcarpet`).
 
 ## Usage
 
@@ -307,7 +304,7 @@ the first request of a newly parsed gem.
 ### 5. `yard graph` Graphviz Generator
 
 You can use `yard graph` to generate dot graphs of your code. This, of course,
-requires [Graphviz](http://www.graphviz.org) and the `dot` binary. By default
+requires [Graphviz](https://www.graphviz.org) and the `dot` binary. By default
 this will generate a graph of the classes and modules in the best UML2 notation
 that Graphviz can support, but without any methods listed. With the `--full`
 option, methods and attributes will be listed. There is also a `--dependencies`
@@ -326,7 +323,7 @@ See {file:CHANGELOG.md} for a list of changes.
 
 ## License
 
-YARD &copy; 2007-2020 by [Loren Segal](mailto:lsegal@soen.ca). YARD is licensed
+YARD &copy; by [Loren Segal](mailto:lsegal@soen.ca). YARD is licensed
 under the MIT license except for some files which come from the RDoc/Ruby
 distributions. Please see the {file:LICENSE} and {file:LEGAL} documents for more
 information.

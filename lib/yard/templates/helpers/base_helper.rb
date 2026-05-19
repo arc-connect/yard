@@ -45,7 +45,7 @@ module YARD::Templates::Helpers
     # method depending on the arguments passed in.
     #
     # @example Linking a URL
-    #   linkify('http://example.com')
+    #   linkify('https://example.com')
     # @example Including docstring contents of an object
     #   linkify('include:YARD::Docstring')
     # @example Linking to an extra file

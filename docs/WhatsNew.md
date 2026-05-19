@@ -1,5 +1,57 @@
 # @title What's New?
 
+# What's New in 0.9.x?
+
+## Support for Ruby Signature Files (.rbs) (0.9.40)
+
+YARD now supports parsing Ruby signature files (.rbs) with full docstring support. This means you can write your documentation in `.rbs` files and have it show up in generated documentation, and use `.rbs` files alongside `.rb` sources to supplement type and API information.
+
+## New built-in Markdown renderer (0.9.40)
+
+YARD now ships with a built-in Markdown renderer (`YARD::Templates::Helpers::Markup::HybridMarkdown`)
+that requires **no external gems**. It supports a practical subset of GitHub Flavored Markdown (GFM)
+as well as common RDoc markup forms, including:
+
+- Headings (`#`, `=`)
+- Fenced code blocks (`` ``` `` and `~~~`) as well as RDoc formatted `+text+` blocks.
+- Tables, blockquotes, and thematic breaks
+- Ordered and unordered lists (including RDoc-style)
+- Inline emphasis, code, links, and images
+- HTML passthrough blocks
+
+This renderer is the **default** for both the `rdoc` and `markdown` markup types—no gem
+installation required. If an optional provider gem (e.g. `redcarpet`, `kramdown`,
+`commonmarker`) is installed and selected, YARD will use it instead for extra features such
+as custom extensions or stricter spec compliance.
+
+## `#-` comment block separators (0.9.40)
+
+YARD now recognizes a trailing `#-` line as a separator between comment
+blocks. This is useful when you want to keep a file header comment at the top
+of a Ruby file without having that header attach itself to the first class,
+module or method in the file.
+
+For example:
+
+    # Copyright (c) Example Corp
+    # This file defines support code shared by the client.
+    #-
+
+    class Client
+    end
+
+In the example above, the file header stays disconnected from `Client`.
+Note that `# -` does **not** act as a separator; only an attached `#-`
+line has this behavior.
+
+## Ruby 4.x support (0.9.39)
+
+Added support for Ruby 4.x along with new syntaxes.
+
+## Other changes
+
+See the [CHANGELOG](CHANGELOG.md) for a full list of changes in 0.9.x.
+
 # What's New in 0.8.x?
 
 1. **Directives (new behavioural tag syntax)** (0.8.0)
@@ -171,7 +223,7 @@ only mixins inside of a "Foo::Bar" namespace by doing:
 YARD now ships with the beginnings of internationalization support
 for translating documentation into multiple languages. The
 `yard i18n` command now allows you to generate ".pot" and ultimately
-".po" files for translation with [gettext](http://www.gnu.org/software/gettext).
+".po" files for translation with [gettext](https://www.gnu.org/software/gettext).
 
 Note that this tool is a small step in the larger transition for
 proper I18n support in YARD. We still have to add proper gettext
@@ -283,7 +335,7 @@ above example would be:
 But note that `--query` does not work when YARD is in "safe mode"
 due to security concerns, whereas `--api` works in either mode.
 This enables `--api` to function on remote documentation sites like
-[rubydoc.info](http://rubydoc.info).
+[rubydoc.info](https://rubydoc.info).
 
 ## Added `--non-transitive-tag` to disable transitive tag (0.8.3)
 
@@ -307,7 +359,7 @@ with `yard server -B PORT` or `yard server --bind PORT`.
 
 Support for the AsciiDoc markup type is now introduced using the `asciidoc`
 markup type (`yard doc -m asciidoc`). Requires the
-[asciidoctor](http://rubygems.org/gems/asciidoctor) RubyGem library to be
+[asciidoctor](https://rubygems.org/gems/asciidoctor) RubyGem library to be
 installed before running YARD.
 
 ## Added `yard markups` command to list available markup types (0.8.6)
@@ -645,7 +697,7 @@ templates. To serve documentation for installed gems:
   will do this for you on-the-fly. It is therefore possible to speed up your
   gem installs by using `gem install GEMNAME --no-rdoc` without repercussion.
   You can also add this switch to your `~/.gemrc` file so that you don't need
-   to re-type it each time. See [this link](http://stackoverflow.com/questions/1789376/how-do-i-make-no-ri-no-rdoc-the-default-for-gem-install)
+   to re-type it each time. See [this link](https://stackoverflow.com/questions/1789376/how-do-i-make-no-ri-no-rdoc-the-default-for-gem-install)
    for exact instructions.</span>
 
 ## Groups support for method listing (0.6.0)
@@ -718,7 +770,7 @@ regular diffing tells you which lines have been added/removed in a file,
 object diffing allows you to see what classes/methods/modules have been
 added/removed between versions of a codebase.
 
-For an overview of how to use `yard diff`, see [YARD Object Oriented Diffing](http://gnuu.org/2010/06/26/yard-object-oriented-diffing/).
+For an overview of how to use `yard diff`, see [YARD Object Oriented Diffing](https://gnuu.org/2010/06/26/yard-object-oriented-diffing/).
 
 ## `yard stats` to display statistics and undocumented objects (0.6.0)
 
@@ -902,7 +954,7 @@ Support for documenting native Ruby C code (0.5.0)
 
 It is now possible to document native Ruby extensions with YARD with a new
 C parser mostly borrowed from RDoc. This enables the ability to document
-Ruby's core and stdlibs which will be hosted on http://yardoc.org/docs. In
+Ruby's core and stdlibs which will be hosted on https://yardoc.org/docs. In
 addition, the .yardoc dump for the Ruby-core classes will become available
 as an installable gem for yri support (see #3).
 
@@ -1144,7 +1196,7 @@ Default rake task is now `rake yard`
 Not a big change, but anyone using the default "rake yardoc" task should
 update their scripts:
 
-[http://github.com/lsegal/yard/commit/ad38a68dd73898b06bd5d0a1912b7d815878fae0](http://github.com/lsegal/yard/commit/ad38a68dd73898b06bd5d0a1912b7d815878fae0)
+[https://github.com/lsegal/yard/commit/ad38a68dd73898b06bd5d0a1912b7d815878fae0](https://github.com/lsegal/yard/commit/ad38a68dd73898b06bd5d0a1912b7d815878fae0)
 
 
 What's New in 0.2.3.x?

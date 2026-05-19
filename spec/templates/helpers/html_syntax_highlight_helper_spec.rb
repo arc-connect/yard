@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+require File.dirname(__FILE__) + '/../spec_helper'
 
 RSpec.describe YARD::Templates::Helpers::HtmlSyntaxHighlightHelper do
   include YARD::Templates::Helpers::HtmlHelper
@@ -48,7 +49,22 @@ RSpec.describe YARD::Templates::Helpers::HtmlSyntaxHighlightHelper do
 
     it "returns escaped unhighlighted source if a syntax error is found (ripper)" do
       allow(self).to receive(:options).and_return(Options.new.update(:highlight => true))
-      expect(html_syntax_highlight("$ git clone http://url")).to eq "$ git clone http://url"
+      expect(html_syntax_highlight("$ git clone https://url")).to eq "$ git clone https://url"
+    end if HAVE_RIPPER
+
+    it "returns already-highlighted source unchanged when ripper fails (no leading whitespace)" do
+      allow(self).to receive(:options).and_return(Options.new.update(:highlight => true))
+      highlighted = "<span class='kw'>def</span> <span class='id identifier rubyid_foo'>foo</span>"
+      expect(html_syntax_highlight(highlighted)).to eq highlighted
+    end if HAVE_RIPPER
+
+    it "returns already-highlighted source unchanged when ripper fails (with leading whitespace)" do
+      # Regression: the old rescue check /^<span\s+class=/ was anchored at start-of-line and
+      # failed to match when the source began with whitespace (e.g. indented def), causing
+      # h(source) to be called and span tags to be HTML-escaped into visible literal text.
+      allow(self).to receive(:options).and_return(Options.new.update(:highlight => true))
+      highlighted = "  <span class='kw'>def</span> <span class='id identifier rubyid_foo'>foo</span>"
+      expect(html_syntax_highlight(highlighted)).to eq highlighted
     end if HAVE_RIPPER
 
     it "links constants/methods" do

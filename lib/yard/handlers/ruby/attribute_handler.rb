@@ -31,8 +31,6 @@ class YARD::Handlers::Ruby::AttributeHandler < YARD::Handlers::Ruby::Base
 
     # Add all attributes
     validated_attribute_names(params).each do |name|
-      namespace.attributes[scope][name] ||= SymbolHash[:read => nil, :write => nil]
-
       # Show their methods as well
       {:read => name, :write => "#{name}="}.each do |type, meth|
         if type == :read ? read : write
@@ -52,12 +50,17 @@ class YARD::Handlers::Ruby::AttributeHandler < YARD::Handlers::Ruby::Base
           register(o)
           o.docstring = doc if o.docstring.blank?(false)
 
-          # Register the object explicitly
-          namespace.attributes[scope][name][type] = o
+          # Register the object explicitly.
+          # Use o.scope rather than scope: register() may have changed o.scope
+          # via a @!scope directive, so the attribute must be stored under the
+          # method's final scope to keep attr_info's lookup consistent.
+          namespace.attributes[o.scope][name] ||= SymbolHash[:read => nil, :write => nil]
+          namespace.attributes[o.scope][name][type] = o
         else
           obj = namespace.children.find {|other| other.name == meth.to_sym && other.scope == scope }
 
           # register an existing method as attribute
+          namespace.attributes[scope][name] ||= SymbolHash[:read => nil, :write => nil]
           namespace.attributes[scope][name][type] = obj if obj
         end
       end

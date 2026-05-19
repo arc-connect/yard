@@ -6,6 +6,11 @@ module YARD
       module HtmlSyntaxHighlightHelper
         include ModuleHelper
 
+        # Matches source that has already been highlighted (i.e. contains a span tag).
+        # Used to avoid double-processing pre-highlighted HTML in the rescue clause of
+        # {#html_syntax_highlight_ruby_ripper} and in the {HtmlHelper#parse_codeblocks} guard.
+        ALREADY_HIGHLIGHTED_RE = /<span[\s>]/
+
         # Highlights Ruby source
         # @param [String] source the Ruby source code
         # @return [String] the highlighted Ruby source
@@ -39,7 +44,7 @@ module YARD
           end
           output
         rescue Parser::ParserSyntaxError
-          source =~ /^<span\s+class=/ ? source : h(source)
+          source =~ ALREADY_HIGHLIGHTED_RE ? source : h(source)
         end
 
         def html_syntax_highlight_ruby_legacy(source)

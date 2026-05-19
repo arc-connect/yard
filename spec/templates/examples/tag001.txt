@@ -61,8 +61,8 @@ See Also:
 ---------
 
     - A
-    - http://url.com
-    - http://url.com - Example
+    - https://url.com
+    - https://url.com - Example
 
 Author:
 -------

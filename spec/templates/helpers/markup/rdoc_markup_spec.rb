@@ -73,7 +73,7 @@ RSpec.describe YARD::Templates::Helpers::Markup::RDocMarkup do
     end
 
     it "does not apply to HTML tag attributes" do
-      expect(fix_typewriter("<a href='http://foo.com/A+b+c'>A+b+c</a>")).to eq "<a href='http://foo.com/A+b+c'>A+b+c</a>"
+      expect(fix_typewriter("<a href='https://foo.com/A+b+c'>A+b+c</a>")).to eq "<a href='https://foo.com/A+b+c'>A+b+c</a>"
       expect(fix_typewriter("<foo class='foo+bar+baz'/>")).to eq "<foo class='foo+bar+baz'/>"
     end
 

@@ -153,6 +153,57 @@ RSpec.describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}Constant
     expect(Registry.at('A::B::C').type).to eq :constant
   end
 
+  it "preserves @!parse attr_reader documentation for Data.define members" do
+    Registry.clear
+    YARD.parse_string <<-eof
+      class MyReturn; end
+      # @!parse
+      #   class ParsedData < Data
+      #     # First attr.
+      #     # @return [Integer]
+      #     attr_reader :x
+      #     # Second attr.
+      #     # @return [MyReturn]
+      #     attr_reader :y
+      #   end
+      ParsedData = Data.define :x, :y
+    eof
+    obj = Registry.at("ParsedData")
+    expect(obj).to be_kind_of(CodeObjects::ClassObject)
+    expect(obj.superclass).to eq P(:Data)
+    x = Registry.at("ParsedData#x")
+    expect(x.docstring).to eq "First attr."
+    expect(x.tag(:return).types).to eq ["Integer"]
+    y = Registry.at("ParsedData#y")
+    expect(y.docstring).to eq "Second attr."
+    expect(y.tag(:return).types).to eq ["MyReturn"]
+  end if HAVE_RIPPER
+
+  it "preserves @!parse @!attribute documentation for Data.define members" do
+    Registry.clear
+    YARD.parse_string <<-eof
+      class MyReturn; end
+      # @!parse
+      #   # @!attribute [r] x
+      #   #   First attr.
+      #   #   @return [Integer]
+      #   # @!attribute [r] y
+      #   #   Second attr.
+      #   #   @return [MyReturn]
+      #   class ParsedAttrData < Data; end
+      ParsedAttrData = Data.define :x, :y
+    eof
+    obj = Registry.at("ParsedAttrData")
+    expect(obj).to be_kind_of(CodeObjects::ClassObject)
+    expect(obj.superclass).to eq P(:Data)
+    x = Registry.at("ParsedAttrData#x")
+    expect(x.docstring).to eq "First attr."
+    expect(x.tag(:return).types).to eq ["Integer"]
+    y = Registry.at("ParsedAttrData#y")
+    expect(y.docstring).to eq "Second attr."
+    expect(y.tag(:return).types).to eq ["MyReturn"]
+  end if HAVE_RIPPER
+
   it "detects compound constant names" do
     YARD.parse_string <<-eof
       module A

@@ -27,7 +27,9 @@ end
 begin
   require 'coveralls'
   Coveralls.wear!
-end if ENV['CI'] && HAVE_RIPPER && RUBY_VERSION >= '2.5.0'
+rescue LoadError
+  log.warn "Coveralls not found, skipping coverage reporting to coveralls.io"
+end if ENV['CI'] && HAVE_RIPPER && RUBY_VERSION >= '2.7.0'
 
 NAMED_OPTIONAL_ARGUMENTS = RUBY_VERSION >= '2.1.0'
 
@@ -178,9 +180,9 @@ RSpec.configure do |config|
 
   # Limits the available syntax to the non-monkey patched syntax that is
   # recommended. For more details, see:
-  #   - http://rspec.info/blog/2012/06/rspecs-new-expectation-syntax/
-  #   - http://www.teaisaweso.me/blog/2013/05/27/rspecs-new-message-expectation-syntax/
-  #   - http://rspec.info/blog/2014/05/notable-changes-in-rspec-3/#zero-monkey-patching-mode
+  #   - https://rspec.info/blog/2012/06/rspecs-new-expectation-syntax/
+  #   - https://www.teaisaweso.me/blog/2013/05/27/rspecs-new-message-expectation-syntax/
+  #   - https://rspec.info/blog/2014/05/notable-changes-in-rspec-3/#zero-monkey-patching-mode
   config.disable_monkey_patching!
 
   # This setting enables warnings. It's recommended, but in some cases may

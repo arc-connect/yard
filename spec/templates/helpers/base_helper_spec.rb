@@ -59,7 +59,7 @@ RSpec.describe YARD::Templates::Helpers::BaseHelper do
 
   describe "#link_url" do
     it "returns the URL" do
-      expect(link_url("http://url")).to eq "http://url"
+      expect(link_url("https://url")).to eq "https://url"
     end
   end
 
@@ -74,9 +74,9 @@ RSpec.describe YARD::Templates::Helpers::BaseHelper do
       linkify("mailto:steve@example.com")
     end
 
-    it "calls #link_url for URL schemes (http://)" do
+    it "calls #link_url for URL schemes (https://)" do
       expect(self).to receive(:link_url)
-      linkify("http://example.com")
+      linkify("https://example.com")
     end
 
     it "calls #link_file for file: links" do
@@ -96,7 +96,7 @@ RSpec.describe YARD::Templates::Helpers::BaseHelper do
     end
 
     it "passes off to #link_url if argument is recognized as a URL" do
-      url = "http://yardoc.org/"
+      url = "https://yardoc.org/"
       expect(self).to receive(:link_url).with(url, nil, {:target => '_parent'})
       linkify url
     end

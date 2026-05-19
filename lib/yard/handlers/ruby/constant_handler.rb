@@ -49,6 +49,7 @@ class YARD::Handlers::Ruby::ConstantHandler < YARD::Handlers::Ruby::Base
     if (lhs.type == :var_field && lhs[0].type == :const) || lhs.type == :const_path_field
       klass = create_class(lhs.source, P(:Data))
       extract_parameters(statement[1]).each do |member|
+        next if klass.attributes[:instance][member]
         klass.attributes[:instance][member] = SymbolHash[:read => nil, :write => nil]
         create_reader(klass, member)
       end

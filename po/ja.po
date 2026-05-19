@@ -27,10 +27,10 @@ msgstr ""
 
 #: ../README.md:4
 msgid ""
-"**Homepage**:     [http://yardoc.org](http://yardoc.org)   \n"
+"**Homepage**:     [https://yardoc.org](https://yardoc.org)   \n"
 "**IRC**:          [irc.freenode.net / #yard](irc://irc.freenode.net/"
 "yard)    \n"
-"**Git**:          [http://github.com/lsegal/yard](http://github.com/lsegal/"
+"**Git**:          [https://github.com/lsegal/yard](https://github.com/lsegal/"
 "yard)   \n"
 "**Author**:       Loren Segal  \n"
 "**Contributors**: See Contributors section below    \n"
@@ -39,9 +39,9 @@ msgid ""
 "**Latest Version**: 0.8.2.1 (codename \"Shave It\")    \n"
 "**Release Date**: June 10th 2012"
 msgstr ""
-"**Homepage**:     [http://yardoc.org](http://yardoc.org)   \n"
+"**Homepage**:     [https://yardoc.org](https://yardoc.org)   \n"
 "**IRC**:          [irc.freenode.net / #yard](irc://irc.freenode.net/yard)    \n"
-"**Git**:          [http://github.com/lsegal/yard](http://github.com/lsegal/yard)   \n"
+"**Git**:          [https://github.com/lsegal/yard](https://github.com/lsegal/yard)   \n"
 "**Author**:       Loren Segal  \n"
 "**Contributors**: See Contributors section below    \n"
 "**Copyright**:    2007-2012    \n"
@@ -686,7 +686,7 @@ msgstr "    $ yard server"
 msgid ""
 "And the project inside the current directory will be parsed (if the source "
 "has\n"
-"not yet been scanned by YARD) and served at [http://localhost:8808](http://"
+"not yet been scanned by YARD) and served at [http://localhost:8808](https://"
 "localhost:8808)."
 msgstr ""
 "上のコマンドによってプロジェクトの現在のディレクトリ内部は解析される。\n"
@@ -748,7 +748,7 @@ msgstr "**5. `yard graph` はGraphvizのジェネレーター**"
 msgid ""
 "You can use `yard graph` to generate dot graphs of your code. This, of "
 "course,\n"
-"requires [Graphviz](http://www.graphviz.org) and the `dot` binary. By "
+"requires [Graphviz](https://www.graphviz.org) and the `dot` binary. By "
 "default\n"
 "this will generate a graph of the classes and modules in the best UML2 "
 "notation\n"
@@ -764,7 +764,7 @@ msgid ""
 "example:"
 msgstr ""
 "あなたのコードの図を生成する為に `yard graph` を利用できる。\n"
-"これにはもちろん、[Graphviz](http://www.graphviz.org)と `dot` が必要となる。\n"
+"これにはもちろん、[Graphviz](https://www.graphviz.org)と `dot` が必要となる。\n"
 "デフォルトでこれは、Graphvizのサポートできる最高のURL2表記で\n"
 "クラスやモジュールの図を生成する。しかし、記載されたメソッドは生成しない。\n"
 "`-- full` オプションを用いメソッドと属性が記述される。\n"
@@ -1283,7 +1283,7 @@ msgstr ""
 #: ../README.md:495
 msgid ""
 "- **November.15.09**: 0.4.0 release\n"
-"    - Added new templating engine based on [tadpole](http://github.com/"
+"    - Added new templating engine based on [tadpole](https://github.com/"
 "lsegal/tadpole)\n"
 "    - Added YARD queries (`--query` CLI argument to yardoc)\n"
 "    - Greatly expanded YARD documentation\n"
@@ -1293,7 +1293,7 @@ msgid ""
 "    - Read about changes in {file:docs/WhatsNew.md}"
 msgstr ""
 "- **November.15.09**: 0.4.0 release\n"
-"    - Added new templating engine based on [tadpole](http://github.com/lsegal/tadpole)\n"
+"    - Added new templating engine based on [tadpole](https://github.com/lsegal/tadpole)\n"
 "    - Added YARD queries (`--query` CLI argument to yardoc)\n"
 "    - Greatly expanded YARD documentation\n"
 "    - Added plugin support\n"
@@ -1422,8 +1422,8 @@ msgstr ""
 "これらのパッチを投げた全ての貢献者のリストは次で見れる:"
 
 #: ../README.md:551
-msgid "http://github.com/lsegal/yard/contributors"
-msgstr "http://github.com/lsegal/yard/contributors"
+msgid "https://github.com/lsegal/yard/contributors"
+msgstr "https://github.com/lsegal/yard/contributors"
 
 #: ../README.md:553
 msgid "## Copyright"
@@ -2259,7 +2259,7 @@ msgid ""
 "are defined \"by convention\". To view samples of common type "
 "specifications\n"
 "and recommended conventions for writing type specifications, see\n"
-"[http://yardoc.org/types.html](http://yardoc.org/types.html). Note that "
+"[https://yardoc.org/types.html](https://yardoc.org/types.html). Note that "
 "these\n"
 "conventions may change every now and then, although we are working on a "
 "more\n"
@@ -2268,7 +2268,7 @@ msgstr ""
 "我々が述べてきたこれらのフィールドの型は殆どがフリーフォームである。\n"
 "実のところ,それらは慣習によって定義される。\n"
 "型の指定用に一般的な型指定の例や推奨される慣習を調べるには、\n"
-"[http://yardoc.org/types.html](http://yardoc.org/types.html)を参照\n"
+"[https://yardoc.org/types.html](https://yardoc.org/types.html)を参照\n"
 "これらの慣習はいつの日か変更されるかもしれない、\n"
 "けれども我々はより正式な型指定の提案に取りかかっている。"
 
@@ -2285,7 +2285,7 @@ msgid ""
 "methods that perform similar metaprogramming tasks, and it is often useful\n"
 "to document their functionality in your application. Consider the "
 "`property`\n"
-"method in a project like [DataMapper](http://datamapper.org), which creates\n"
+"method in a project like [DataMapper](https://datamapper.org), which creates\n"
 "a typed attribute for a database model. The code might look like:"
 msgstr ""
 "Rubyの中のアプリケーションコードは、\n"
@@ -2295,7 +2295,7 @@ msgstr ""
 "とはいうものの、フレームワークやライブラリでは、\n"
 "大抵似たようなメタプログラミング作業を実行するカスタムメソッドを目にする。\n"
 "そして、それはアプリケーションの中にある機能を記述する為に便利である。\n"
-"[DataMapper](http://datamapper.org)のようにプロジェクトの中の `property` メソッドを考え、\n"
+"[DataMapper](https://datamapper.org)のようにプロジェクトの中の `property` メソッドを考え、\n"
 "そして、データベースモデル用の属性の型を作成すると\n"
 "コー​​ドは次のようになる。"
 
@@ -2645,8 +2645,8 @@ msgid "   # !{ :some_key => 'value' }"
 msgstr "   # !{ :some_key => 'value' }"
 
 #: ../docs/GettingStarted.md:334
-msgid "### Linking URLs `{http://...}`"
-msgstr "### URLのリンク `{http://...}`"
+msgid "### Linking URLs `{https://...}`"
+msgstr "### URLのリンク `{https://...}`"
 
 #: ../docs/GettingStarted.md:336
 msgid "URLs are also linked using this `{...}` syntax:"
@@ -2654,10 +2654,10 @@ msgstr "URLはこの`{...}`構文を用いリンクされる。"
 
 #: ../docs/GettingStarted.md:338
 msgid ""
-"    {http://example.com Optional Title}\n"
+"    {https://example.com Optional Title}\n"
 "    {mailto:email@example.com}"
 msgstr ""
-"    {http://example.com Optional Title}\n"
+"    {https://example.com Optional Title}\n"
 "    {mailto:email@example.com}"
 
 #: ../docs/GettingStarted.md:341
@@ -3287,11 +3287,11 @@ msgstr ""
 
 #: ../docs/GettingStarted.md:581
 msgid ""
-"    $ gem install yard-rspec -s http://gemcutter.org\n"
+"    $ gem install yard-rspec -s https://gemcutter.org\n"
 "    or\n"
 "    $ git clone git://github.com/lsegal/yard-spec-plugin"
 msgstr ""
-"    $ gem install yard-rspec -s http://gemcutter.org\n"
+"    $ gem install yard-rspec -s https://gemcutter.org\n"
 "    or\n"
 "    $ git clone git://github.com/lsegal/yard-spec-plugin"
 
@@ -3315,13 +3315,13 @@ msgstr ""
 
 #: ../docs/GettingStarted.md:590
 msgid ""
-"[graphviz]:http://www.graphviz.org\n"
-"[yard-rspec]:http://github.com/lsegal/yard-spec-plugin\n"
-"[rspec]:http://rspec.info"
+"[graphviz]:https://www.graphviz.org\n"
+"[yard-rspec]:https://github.com/lsegal/yard-spec-plugin\n"
+"[rspec]:https://rspec.info"
 msgstr ""
-"[graphviz]:http://www.graphviz.org\n"
-"[yard-rspec]:http://github.com/lsegal/yard-spec-plugin\n"
-"[rspec]:http://rspec.info"
+"[graphviz]:https://www.graphviz.org\n"
+"[yard-rspec]:https://github.com/lsegal/yard-spec-plugin\n"
+"[rspec]:https://rspec.info"
 
 # title
 #: ../docs/Handlers.md:1
@@ -4877,13 +4877,13 @@ msgid ""
 "<p class=\"note\">\n"
 "  A list of examples of common type listings and what they translate into "
 "is\n"
-"  available at <a href=\"http://yardoc.org/types\">http://yardoc.org/types</"
+"  available at <a href=\"https://yardoc.org/types\">https://yardoc.org/types</"
 "a>.\n"
 "</p>"
 msgstr ""
 "<p class=\"note\">\n"
 "  A list of examples of common type listings and what they translate into is\n"
-"  available at <a href=\"http://yardoc.org/types\">http://yardoc.org/types</a>.\n"
+"  available at <a href=\"https://yardoc.org/types\">https://yardoc.org/types</a>.\n"
 "</p>"
 
 #: ../docs/Tags.md:146
@@ -7316,12 +7316,12 @@ msgid ""
 "YARD now ships with the beginnings of internationalization support\n"
 "for translating documentation into multiple languages. The\n"
 "`yard i18n` command now allows you to generate \".pot\" and ultimately\n"
-"\".po\" files for translation with [gettext](http://www.gnu.org/software/"
+"\".po\" files for translation with [gettext](https://www.gnu.org/software/"
 "gettext)."
 msgstr ""
 "YARDは複数の言語に翻訳したドキュメント用に国際化サポートを送りだすことになった。\n"
 "`yard i18n` コマンドは\n"
-"あなたが[gettext](http://www.gnu.org/software/gettext)を用いた翻訳用の\n"
+"あなたが[gettext](https://www.gnu.org/software/gettext)を用いた翻訳用の\n"
 "\".pot\"と最後に\".po\"ファイルを生成するのを許可するようになった。"
 
 #: ../docs/WhatsNew.md:169
@@ -7561,7 +7561,7 @@ msgid ""
 "But note that `--query` does not work when YARD is in \"safe mode\"\n"
 "due to security concerns, whereas `--api` works in either mode.\n"
 "This enables `--api` to function on remote documentation sites like\n"
-"[rubydoc.info](http://rubydoc.info)."
+"[rubydoc.info](https://rubydoc.info)."
 msgstr ""
 
 #: ../docs/WhatsNew.md:282
@@ -8308,7 +8308,7 @@ msgid ""
 "repercussion.\n"
 "  You can also add this switch to your `~/.gemrc` file so that you don't "
 "need\n"
-"   to re-type it each time. See [this link](http://stackoverflow.com/"
+"   to re-type it each time. See [this link](https://stackoverflow.com/"
 "questions/1789376/how-do-i-make-no-ri-no-rdoc-the-default-for-gem-install)\n"
 "   for exact instructions.</span>"
 msgstr ""
@@ -8317,7 +8317,7 @@ msgstr ""
 "  will do this for you on-the-fly. It is therefore possible to speed up your\n"
 "  gem installs by using `gem install GEMNAME --no-rdoc` without repercussion.\n"
 "  You can also add this switch to your `~/.gemrc` file so that you don't need\n"
-"   to re-type it each time. See [this link](http://stackoverflow.com/questions/1789376/how-do-i-make-no-ri-no-rdoc-the-default-for-gem-install)\n"
+"   to re-type it each time. See [this link](https://stackoverflow.com/questions/1789376/how-do-i-make-no-ri-no-rdoc-the-default-for-gem-install)\n"
 "   for exact instructions.</span>"
 
 #: ../docs/WhatsNew.md:572
@@ -8509,8 +8509,8 @@ msgstr ""
 #: ../docs/WhatsNew.md:642
 msgid ""
 "For an overview of how to use `yard diff`, see [YARD Object Oriented Diffing]"
-"(http://gnuu.org/2010/06/26/yard-object-oriented-diffing/)."
-msgstr "For an overview of how to use `yard diff`, see [YARD Object Oriented Diffing](http://gnuu.org/2010/06/26/yard-object-oriented-diffing/)."
+"(https://gnuu.org/2010/06/26/yard-object-oriented-diffing/)."
+msgstr "For an overview of how to use `yard diff`, see [YARD Object Oriented Diffing](https://gnuu.org/2010/06/26/yard-object-oriented-diffing/)."
 
 #: ../docs/WhatsNew.md:644
 msgid "## `yard stats` to display statistics and undocumented objects (0.6.0)"
@@ -8987,14 +8987,14 @@ msgstr ""
 msgid ""
 "It is now possible to document native Ruby extensions with YARD with a new\n"
 "C parser mostly borrowed from RDoc. This enables the ability to document\n"
-"Ruby's core and stdlibs which will be hosted on http://yardoc.org/docs. In\n"
+"Ruby's core and stdlibs which will be hosted on https://yardoc.org/docs. In\n"
 "addition, the .yardoc dump for the Ruby-core classes will become available\n"
 "as an installable gem for yri support (see #3)."
 msgstr ""
 "大部分をRDocから取り入れた新しいCパーサーと共にYARDを用い\n"
 "Rubyの拡張ドキュメントを実行可能になった。\n"
 "これは、Rubyのコアと標準ライブラリを記述する事を可能にする。\n"
-"そして、http://yardoc.org/docs でホスト(アクセスできる)されるだろう。\n"
+"そして、https://yardoc.org/docs でホスト(アクセスできる)されるだろう。\n"
 "さらに、Rubyコアクラス用の.yardocのダンプは、\n"
 "yriのサポートに用いるインストール可能なgemとして利用可能になるだろう。(#3 参"
 "照)"
@@ -9646,10 +9646,10 @@ msgstr ""
 
 #: ../docs/WhatsNew.md:1068
 msgid ""
-"[http://github.com/lsegal/yard/commit/"
-"ad38a68dd73898b06bd5d0a1912b7d815878fae0](http://github.com/lsegal/yard/"
+"[https://github.com/lsegal/yard/commit/"
+"ad38a68dd73898b06bd5d0a1912b7d815878fae0](https://github.com/lsegal/yard/"
 "commit/ad38a68dd73898b06bd5d0a1912b7d815878fae0)"
-msgstr "[http://github.com/lsegal/yard/commit/ad38a68dd73898b06bd5d0a1912b7d815878fae0](http://github.com/lsegal/yard/commit/ad38a68dd73898b06bd5d0a1912b7d815878fae0)"
+msgstr "[https://github.com/lsegal/yard/commit/ad38a68dd73898b06bd5d0a1912b7d815878fae0](https://github.com/lsegal/yard/commit/ad38a68dd73898b06bd5d0a1912b7d815878fae0)"
 
 #: ../docs/WhatsNew.md:1071
 msgid ""
@@ -10670,7 +10670,7 @@ msgstr "コマンドラインユーティリティを起動する。"
 msgid "each tokenized argument"
 msgstr "個々にトークナイズされた引数"
 
-# @example 
+# @example
 #: ../lib/yard/cli/graph.rb:50
 msgid ""
 "grapher = Graph.new\n"
@@ -11706,7 +11706,7 @@ msgstr "追加の検索パスのリスト"
 msgid "a new instance of YRI"
 msgstr "YRIの新しいインスタンス"
 
-# @example 
+# @example
 #: ../lib/yard/cli/yri.rb:49
 msgid "YRI.new.run('String#reverse')"
 msgstr ""
@@ -14321,10 +14321,10 @@ msgstr "このクラスrootオブジェクトにはならない"
 
 # @note
 #: ../lib/yard/code_objects/proxy.rb:218
-msgid "this method fixes a bug in 1.9.2: http://gist.github.com/437136"
+msgid "this method fixes a bug in 1.9.2: https://gist.github.com/437136"
 msgstr ""
 "このメソッドはバグを修正する。\n"
-"(in 1.9.2: http://gist.github.com/4371369)"
+"(in 1.9.2: https://gist.github.com/4371369)"
 
 # YARD::CodeObjects::Proxy#to_obj
 #: ../lib/yard/code_objects/proxy.rb:221
@@ -14906,7 +14906,7 @@ msgid ""
 "value in a list."
 msgstr "Insertionクラスはリストの中の前後に他の値を挿入する。"
 
-# @example 
+# @example
 #: ../lib/yard/core_ext/insertion.rb:6
 msgid "Insertion.new([1, 2, 3], 4).before(3) # => [1, 2, 4, 3]"
 msgstr ""
@@ -15033,7 +15033,7 @@ msgstr "オブジェクトが置かれる所の相対インデックス(0又は1
 msgid "Returns the class name of a full module namespace path"
 msgstr "モジュールの完全なnamespaceパスのクラス名を返す"
 
-# @example 
+# @example
 #: ../lib/yard/core_ext/module.rb:7
 msgid "module A::B::C; class_name end # => \"C\""
 msgstr ""
@@ -15405,7 +15405,7 @@ msgstr ""
 "任意のオブジェクトに追加された未加工のコンテンツを用い新しいdocstringを作成する。\n"
 "解析は {DocstringParser} クラスによって完了する。"
 
-# @example 
+# @example
 #: ../lib/yard/docstring.rb:99
 msgid "Docstring.new(\"hello world\\n@return Object return\", someobj)"
 msgstr ""
@@ -15590,7 +15590,7 @@ msgstr ""
 "タグオブジェクトのリストのような名前の中の、\n"
 "最初のタグオブジェクトを返す為の便利なメソッド。"
 
-# @example 
+# @example
 #: ../lib/yard/docstring.rb:237
 msgid ""
 "doc = Docstring.new(\"@return zero when nil\")\n"
@@ -18006,7 +18006,7 @@ msgstr "accepted_types"
 msgid "tag|param|token"
 msgstr "token"
 
-# @example 
+# @example
 #: ../lib/yard/handlers/ruby/legacy/base.rb:116
 msgid ""
 "tokval(TokenList.new('\"foo\"').first) => \"foo\"\n"
@@ -18436,14 +18436,14 @@ msgid ""
 "messages."
 msgstr ""
 
-# @see http://tools.ietf.org/rfc/bcp/bcp47.txt
+# @see https://tools.ietf.org/rfc/bcp/bcp47.txt
 #: ../lib/yard/i18n/locale.rb:15
 msgid "BCP 47 - Tags for Identifying Languages"
 msgstr ""
 
 # @see
 #: ../lib/yard/i18n/locale.rb:15
-msgid "tag|see|http://tools.ietf.org/rfc/bcp/bcp47.txt"
+msgid "tag|see|https://tools.ietf.org/rfc/bcp/bcp47.txt"
 msgstr ""
 
 # @return [String]
@@ -18761,7 +18761,7 @@ msgid ""
 "\"po/yard.pot\"."
 msgstr ""
 
-# @see http://www.gnu.org/software/gettext/manual/html_node/PO-Files.html
+# @see https://www.gnu.org/software/gettext/manual/html_node/PO-Files.html
 #: ../lib/yard/i18n/pot_generator.rb:64
 msgid "GNU gettext manual about details of PO file"
 msgstr ""
@@ -18793,7 +18793,7 @@ msgstr "tag|example|.popファイルを生成する"
 # @see
 #: ../lib/yard/i18n/pot_generator.rb:64
 msgid ""
-"tag|see|http://www.gnu.org/software/gettext/manual/html_node/PO-Files.html"
+"tag|see|https://www.gnu.org/software/gettext/manual/html_node/PO-Files.html"
 msgstr ""
 
 # YARD::I18n::PotGenerator#messages
@@ -19214,7 +19214,7 @@ msgstr ""
 msgid "Sets the logger level for the duration of the block"
 msgstr "ブロックの継続するlogger levelを設定する。"
 
-# @example 
+# @example
 #: ../lib/yard/logging.rb:151
 msgid ""
 "log.enter_level(Logger::ERROR) do\n"
@@ -24256,7 +24256,7 @@ msgid ""
 "    # otherwise download it in a thread and return immediately\n"
 "    Thread.new do\n"
 "      # zip/unzip method implementations are not shown\n"
-"      download_zip_file(\"http://mysite.com/yardocs/#{self}.zip\")\n"
+"      download_zip_file(\"https://mysite.com/yardocs/#{self}.zip\")\n"
 "      unzip_file_to(\"/path/to/yardocs/#{self}\")\n"
 "      self.yardoc_file = \"/path/to/yardocs/#{self}/.yardoc\"\n"
 "      self.source_path = self.yardoc_file\n"
@@ -24282,7 +24282,7 @@ msgstr ""
 "    # その他の場合、そのスレッドの中でダウンロードし直ぐに返す\n"
 "    Thread.new do\n"
 "      # zip/unzip メソッドの実装は示さない\n"
-"      download_zip_file(\"http://mysite.com/yardocs/#{self}.zip\")\n"
+"      download_zip_file(\"https://mysite.com/yardocs/#{self}.zip\")\n"
 "      unzip_file_to(\"/path/to/yardocs/#{self}\")\n"
 "      self.yardoc_file = \"/path/to/yardocs/#{self}/.yardoc\"\n"
 "      self.source_path = self.yardoc_file\n"
@@ -25055,7 +25055,7 @@ msgstr ""
 "テキスト行の先頭で[],<>,{},()ブロックのカンマで区切られた値の配列の中を解析す"
 "る\n"
 
-# @example 
+# @example
 #: ../lib/yard/tags/default_factory.rb:125
 msgid ""
 "obj.parse_types('[String, Array<Hash, String>, nil]') # => [nil, ['String', "
@@ -25249,7 +25249,7 @@ msgid ""
 "group listing."
 msgstr ""
 
-# @example 
+# @example
 #: ../lib/yard/tags/directives.rb:97
 msgid ""
 "class Controller\n"
@@ -25279,7 +25279,7 @@ msgid ""
 "use {tag:!endgroup}."
 msgstr ""
 
-# @example 
+# @example
 #: ../lib/yard/tags/directives.rb:120
 msgid ""
 "# @!group Callbacks\n"
@@ -25999,7 +25999,7 @@ msgstr ""
 "ばならない。\n"
 "設定しない場合、あなたのfactoryクラスは利用できない。"
 
-# @example 
+# @example
 #: ../lib/yard/tags/library.rb:84
 msgid "YARD::Tags::Library.default_factory = MyFactory"
 msgstr ""
@@ -26306,7 +26306,7 @@ msgstr ""
 msgid "[] API Visibility"
 msgstr ""
 
-# @example 
+# @example
 #: ../lib/yard/tags/library.rb:327
 msgid ""
 "class Post\n"
@@ -26331,7 +26331,7 @@ msgstr ""
 "任意のテキストは\n"
 "このタグを受入可能であり、事前定義された値はない。"
 
-# @example 
+# @example
 #: ../lib/yard/tags/library.rb:337
 msgid ""
 "# @attr [String] name the name of the structure\n"
@@ -26368,7 +26368,7 @@ msgstr ""
 msgid "Declares a readwrite attribute on a Struct or class."
 msgstr ""
 
-# @example 
+# @example
 #: ../lib/yard/tags/library.rb:347 ../lib/yard/tags/library.rb:357
 msgid ""
 "# @attr_reader [String] name the name of the structure\n"
@@ -26424,7 +26424,7 @@ msgstr ""
 msgid "Declares a writeonly attribute on a Struct or class."
 msgstr ""
 
-# @example 
+# @example
 #: ../lib/yard/tags/library.rb:364
 msgid ""
 "# @author Foo Bar <foo@bar.com>\n"
@@ -26491,7 +26491,7 @@ msgid ""
 "was marked as deprecated."
 msgstr ""
 
-# @example 
+# @example
 #: ../lib/yard/tags/library.rb:391
 msgid ""
 "# @example Reverse a String\n"
@@ -26550,7 +26550,7 @@ msgstr ""
 msgid "Adds an emphasized note at the top of the docstring for the object"
 msgstr ""
 
-# @example 
+# @example
 #: ../lib/yard/tags/library.rb:418
 msgid ""
 "# @param [Hash] opts the options to create a message with.\n"
@@ -26599,7 +26599,7 @@ msgid ""
 "hash itself, though it is useful to do so for completeness."
 msgstr ""
 
-# @example 
+# @example
 #: ../lib/yard/tags/library.rb:437
 msgid ""
 "# @overload set(key, value)\n"
@@ -26644,7 +26644,7 @@ msgstr ""
 "オーバーロードの様に自身の追加するメタデータタグを用い\n"
 "新しいドキュメント文字列になる。"
 
-# @example 
+# @example
 #: ../lib/yard/tags/library.rb:445
 msgid ""
 "# @param [String] the URL of the page to download\n"
@@ -26669,7 +26669,7 @@ msgid ""
 "and optional description."
 msgstr ""
 
-# @example 
+# @example
 #: ../lib/yard/tags/library.rb:473
 msgid ""
 "# @private\n"
@@ -26723,7 +26723,7 @@ msgid ""
 "switches."
 msgstr ""
 
-# @example 
+# @example
 #: ../lib/yard/tags/library.rb:482
 msgid ""
 "# @raise [AccountBalanceError] if the account does not have\n"
@@ -26801,11 +26801,11 @@ msgid ""
 "case should begin with \"if ...\"."
 msgstr ""
 
-# @example 
+# @example
 #: ../lib/yard/tags/library.rb:510
 msgid ""
 "# Synchronizes system time using NTP.\n"
-"# @see http://ntp.org/documentation.html NTP Documentation\n"
+"# @see https://ntp.org/documentation.html NTP Documentation\n"
 "# @see NTPHelperMethods\n"
 "class NTPUpdater; end"
 msgstr ""
@@ -26833,7 +26833,7 @@ msgstr ""
 "YARDによって自動的にリンクされ、\n"
 "マークアップを用いフォーマットされる必要はない。"
 
-# @example 
+# @example
 #: ../lib/yard/tags/library.rb:518
 msgid ""
 "# @since 1.2.4\n"
@@ -26858,7 +26858,7 @@ msgstr "オブジェクトが最初に追加されたバージョンを記述す
 msgid ""
 "# @todo Add support for Jabberwocky service.\n"
 "#   There is an open source Jabberwocky library available\n"
-"#   at http://jbrwcky.org that can be easily integrated.\n"
+"#   at https://jbrwcky.org that can be easily integrated.\n"
 "class Wonderlander; end"
 msgstr ""
 
@@ -26911,10 +26911,10 @@ msgid ""
 "  end"
 msgstr ""
 
-# @example 
+# @example
 #: ../lib/yard/tags/library.rb:557
 msgid ""
-"# The public REST API for http://jbrwcky.org\n"
+"# The public REST API for https://jbrwcky.org\n"
 "# @version 2.0\n"
 "class JabberwockyAPI; end"
 msgstr ""
@@ -26940,7 +26940,7 @@ msgid ""
 "of a specific object."
 msgstr ""
 
-# @example 
+# @example
 #: ../lib/yard/tags/library.rb:573
 msgid ""
 "# For a block {|a,b,c| ... }\n"
@@ -26983,7 +26983,7 @@ msgid ""
 "well."
 msgstr ""
 
-# @example 
+# @example
 #: ../lib/yard/tags/library.rb:582
 msgid ""
 "# @yieldparam [String] name the name that is yielded\n"
@@ -27008,7 +27008,7 @@ msgid ""
 "them via +@yield+ as well."
 msgstr ""
 
-# @example 
+# @example
 #: ../lib/yard/tags/library.rb:591
 msgid ""
 "# @yieldreturn [Fixnum] the number to add 5 to.\n"
@@ -27769,7 +27769,7 @@ msgstr ""
 
 # @example Linking a URL
 #: ../lib/yard/templates/helpers/base_helper.rb:54
-msgid "linkify('http://example.com')"
+msgid "linkify('https://example.com')"
 msgstr ""
 
 # @example Including docstring contents of an object
@@ -28020,7 +28020,7 @@ msgstr ""
 msgid "the object to retrieve the type for"
 msgstr "型を回収するオブジェクト"
 
-# @example 
+# @example
 #: ../lib/yard/templates/helpers/base_helper.rb:193
 msgid ""
 "s = format_object_title ModuleObject.new(:root, :MyModuleName)\n"

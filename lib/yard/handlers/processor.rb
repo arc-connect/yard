@@ -35,6 +35,7 @@ module YARD
       register_handler_namespace :ruby, Ruby
       register_handler_namespace :ruby18, Ruby::Legacy
       register_handler_namespace :c, C
+      register_handler_namespace :rbs, RBS
 
       # @return [String] the filename
       attr_accessor :file

@@ -48,6 +48,12 @@ RSpec.describe YARD::Server::Commands::Base do
   end
 
   describe "#call" do
+    it "sanitizes path_info" do
+      cmd = MyProcCommand.new { self.body = path }
+      _, _, b = *cmd.call(mock_request('/../../a/b/c'))
+      expect(b).to eq ['a/b/c']
+    end
+
     it "handles a NotFoundError and use message as body" do
       cmd = MyProcCommand.new { raise NotFoundError, "hello world" }
       s, _, b = *cmd.call(mock_request('/foo'))

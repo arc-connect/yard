@@ -4,6 +4,8 @@
     <%= erb(:headers) %>
   </head>
   <body>
+    <div id="main_progress" aria-hidden="true"></div>
+
     <div class="nav_wrap">
       <iframe id="nav" src="<%= @nav_url %>?1"></iframe>
       <div id="resizer"></div>

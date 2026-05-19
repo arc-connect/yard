@@ -476,6 +476,29 @@ eof
       expect(ast.first.last.last.docstring).to eq "end comment"
     end
 
+    it "ignores comments whose last line is a lone hyphen" do
+      Registry.clear
+      ast = YARD.parse_string(<<-eof).enumerator
+        # title
+        #-
+        class Foo; end
+      eof
+
+      expect(ast.first.docstring).to be_nil
+      expect(ast.map(&:type)).not_to include(:comment)
+    end
+
+    it "does not ignore comments when the hyphen is spaced from the hash" do
+      Registry.clear
+      ast = YARD.parse_string(<<-eof).enumerator
+        # title
+        # -
+        class Foo; end
+      eof
+
+      expect(ast.first.docstring).to eq "title\n-"
+    end
+
     it "does not group comments if they don't begin the line" do
       Registry.clear
       YARD.parse_string(<<-eof).enumerator
@@ -677,6 +700,161 @@ return if foo && foo in []
         expect(actual_text).to eq(pattern),
           "Pattern #{pattern} should have source range covering the full expression, got #{actual_text.inspect}"
       end
+    end if RUBY_VERSION >= '3.'
+
+    it "provides correct source range for aref after array pattern deconstruction" do
+      code = <<-RUBY
+class Foo
+  def check(obj)
+    case obj
+    in Bar["key", v]
+      v
+    end
+  end
+
+  def fetch(h)
+    h["result"]
+  end
+end
+      RUBY
+
+      parser = YARD::Parser::Ruby::RubyParser.new(code, nil)
+      ast = parser.parse.root
+
+      aref_node = nil
+      ast.traverse do |node|
+        if node.type == :aref
+          aref_node = node
+          break
+        end
+      end
+
+      expect(aref_node).not_to be_nil
+      expect(code[aref_node.source_range]).to eq('h["result"]')
+    end if RUBY_VERSION >= '3.'
+
+    it "provides correct source range for aref after find pattern deconstruction" do
+      code = <<-RUBY
+class Foo
+  def check(obj)
+    case obj
+    in Bar[*, v, *]
+      v
+    end
+  end
+
+  def fetch(h)
+    h["result"]
+  end
+end
+      RUBY
+
+      parser = YARD::Parser::Ruby::RubyParser.new(code, nil)
+      ast = parser.parse.root
+
+      aref_node = nil
+      ast.traverse do |node|
+        if node.type == :aref
+          aref_node = node
+          break
+        end
+      end
+
+      expect(aref_node).not_to be_nil
+      expect(code[aref_node.source_range]).to eq('h["result"]')
+    end if RUBY_VERSION >= '3.'
+
+    it "provides correct source range for hash literal after braced hash pattern deconstruction" do
+      code = <<-RUBY
+class Foo
+  def check(obj)
+    case obj
+    in { name: String }
+      "matched"
+    end
+  end
+
+  def build
+    { name: "Alice" }
+  end
+end
+      RUBY
+
+      parser = YARD::Parser::Ruby::RubyParser.new(code, nil)
+      ast = parser.parse.root
+
+      hash_node = nil
+      ast.traverse do |node|
+        if node.type == :hash
+          hash_node = node
+          break
+        end
+      end
+
+      expect(hash_node).not_to be_nil
+      expect(code[hash_node.source_range]).to eq('{ name: "Alice" }')
+    end if RUBY_VERSION >= '3.'
+
+    it "provides correct source range for aref after bare array pattern deconstruction" do
+      code = <<-RUBY
+class Foo
+  def check(obj)
+    case obj
+    in [a, b]
+      a
+    end
+  end
+
+  def fetch(h)
+    h["result"]
+  end
+end
+      RUBY
+
+      parser = YARD::Parser::Ruby::RubyParser.new(code, nil)
+      ast = parser.parse.root
+
+      aref_node = nil
+      ast.traverse do |node|
+        if node.type == :aref
+          aref_node = node
+          break
+        end
+      end
+
+      expect(aref_node).not_to be_nil
+      expect(code[aref_node.source_range]).to eq('h["result"]')
+    end if RUBY_VERSION >= '3.'
+
+    it "provides correct source range for hash literal after bare hash pattern deconstruction" do
+      code = <<-RUBY
+class Foo
+  def check(obj)
+    case obj
+    in name: String
+      "matched"
+    end
+  end
+
+  def build
+    { name: "Alice" }
+  end
+end
+      RUBY
+
+      parser = YARD::Parser::Ruby::RubyParser.new(code, nil)
+      ast = parser.parse.root
+
+      hash_node = nil
+      ast.traverse do |node|
+        if node.type == :hash
+          hash_node = node
+          break
+        end
+      end
+
+      expect(hash_node).not_to be_nil
+      expect(code[hash_node.source_range]).to eq('{ name: "Alice" }')
     end if RUBY_VERSION >= '3.'
 
     it "provides correct range for `next` statement following `def` _symbol_" do

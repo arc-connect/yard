@@ -543,6 +543,7 @@ module YARD
     # @since 0.8.0
     class ParseDirective < Directive
       def call
+        existing = YARD::Registry.all.lazy.map(&:path).to_set if handler
         lang = tag.types ? tag.types.first.to_sym :
           (handler ? handler.parser.parser_type : :ruby)
         if handler && lang == handler.parser.parser_type
@@ -554,6 +555,12 @@ module YARD
           src_parser = Parser::SourceParser.new(lang, handler ? handler.globals : nil)
           src_parser.file = handler.parser.file if handler
           src_parser.parse(StringIO.new(tag.text))
+        end
+        return unless handler
+        YARD::Registry.all.each do |obj|
+          next if existing.include? obj.path
+          obj.files.each { |entry| entry[1] = handler.statement.line if entry[0] == handler.parser.file.to_s }
+          obj.source = handler.statement.source
         end
       end
     end

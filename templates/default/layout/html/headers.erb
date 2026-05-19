@@ -7,7 +7,7 @@
   <% end %>
 </title>
 <% stylesheets.each do |stylesheet| %>
-  <link rel="stylesheet" href="<%= mtime_url(stylesheet) %>" type="text/css" />
+  <link rel="stylesheet" href="<%= mtime_url(stylesheet) %>" type="text/css">
 <% end %>
 <%= erb :script_setup %>
 <% javascripts.each do |javascript| %>

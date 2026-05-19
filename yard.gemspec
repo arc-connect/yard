@@ -13,12 +13,13 @@ Gem::Specification.new do |s|
   s.version       = YARD::VERSION
   s.author        = "Loren Segal"
   s.email         = "lsegal@soen.ca"
-  s.homepage      = "http://yardoc.org"
+  s.homepage      = "https://yardoc.org"
   s.platform      = Gem::Platform::RUBY
   s.files         = Dir['{lib,docs,po,templates}/**/*', '.yardopts*', 'CHANGELOG.md', 'LICENSE', 'LEGAL', 'README.md']
   s.require_paths = ['lib']
   s.executables   = ['yard', 'yardoc', 'yri']
   s.license = 'MIT' if s.respond_to?(:license=)
+  s.required_ruby_version = '>= 1.8.7' if s.respond_to?(:required_ruby_version=)
   s.metadata['yard.run'] = 'yri'
   s.metadata['changelog_uri'] = 'https://rubydoc.info/gems/yard/file/CHANGELOG.md'
 end

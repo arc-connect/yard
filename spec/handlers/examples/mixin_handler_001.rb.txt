@@ -39,6 +39,13 @@ end
 module FromConstant; end
 FromConstant.include A
 
+module Outer1
+end
+
+module Outer1::Inner
+  include Inner
+end
+
 module Foo
 end
 

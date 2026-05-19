@@ -1,42 +1,101 @@
-require 'json'
-require 'tempfile'
+require 'date'
+require 'rake/file_utils'
 
 namespace :release do
-  desc 'Updates repository and tags VERSION=X.Y.Z'
-  task :tag do
-    restore_file = Tempfile.new
-    restore_file.close
-    at_exit { restore_file.unlink }
+  module ReleaseTagHelpers
+    extend self
+    include Rake::FileUtilsExt
 
-    version = ENV['VERSION']
-    build_path = File.expand_path(File.join(`gem which samus`.strip, '..', '..', 'commands', 'build'))
-    samus_contents = File.read(File.join(__dir__, '..', 'samus.json'))
-    samus_json = JSON.parse(samus_contents.gsub('$version', version))
+    VERSION_FILE = File.expand_path('../lib/yard/version.rb', __dir__)
+    CHANGELOG_FILE = File.expand_path('../CHANGELOG.md', __dir__)
 
-    samus_json['actions'].each do |action|
-      env = {
-        '_VERSION' => version,
-        '__ORIG_BRANCH' => `git rev-parse --abbrev-ref HEAD`.strip,
-        '__RESTORE_FILE' => restore_file.path,
-      }
-      (action['arguments'] || {}).each {|k, v| env["_#{k.upcase}"] = v }
-      file = File.join(build_path, action['action'])
-      shebang = File.readlines(file).first[%r{\A#!(?:\S+)/(.+)}, 1].strip.split(' ')
-      cmd = [*shebang, file, *action['files']]
-      puts "[C] #{action['action']} #{(action['files'] || []).join(' ')}"
-      output = ""
-      IO.popen(env, cmd) {|io| output = io.read }
-      status = $?
-      unless status.success?
-        puts "[F] Last command failed with: #{status.to_i}"
-        puts output
-        exit(status.to_i)
-      end
+    def release_version!
+      version = ENV['VERSION'].to_s.strip
+      raise 'VERSION=X.Y.Z is required' if version.empty?
+
+      tag_name = "v#{version}"
+      raise "Git tag #{tag_name} already exists" if tag_exists?(tag_name)
+
+      ensure_clean_worktree!
+
+      previous_version = current_version
+      update_version_file(version)
+      rotate_changelog(previous_version, version, Date.today)
+
+      sh('git', 'add', VERSION_FILE, CHANGELOG_FILE)
+      sh('npx', 'vpr', 'release-commit', version)
+      sh('git', '--no-pager', 'show')
     end
 
-    puts ""
+    def current_version
+      contents = File.read(VERSION_FILE)
+      match = contents.match(/VERSION = ['"](.+?)['"]/)
+      raise "Could not find VERSION in #{VERSION_FILE}" unless match
+
+      match[1]
+    end
+
+    def update_version_file(version)
+      contents = File.read(VERSION_FILE)
+      updated = contents.sub(/VERSION = ['"](.+?)['"]/, "VERSION = '#{version}'")
+      raise "Could not update VERSION in #{VERSION_FILE}" if updated == contents
+
+      File.write(VERSION_FILE, updated)
+    end
+
+    def rotate_changelog(previous_version, version, date)
+      contents = File.read(CHANGELOG_FILE)
+      match = contents.match(/\A# main\n+(?<entries>.*?)(?=^# \[[^\]]+\] - )/m)
+      raise "Could not find '# main' release entries in #{CHANGELOG_FILE}" unless match
+
+      entries = match[:entries].strip
+      raise "No unreleased entries found under '# main' in #{CHANGELOG_FILE}" if entries.empty?
+
+      release_heading = "# [#{version}] - #{format_release_date(date)}"
+      compare_link = "[#{version}]: https://github.com/lsegal/yard/compare/v#{previous_version}...v#{version}"
+      replacement = [
+        '# main',
+        '',
+        release_heading,
+        '',
+        compare_link,
+        '',
+        entries,
+        '',
+        ''
+      ].join("\n")
+
+      File.write(CHANGELOG_FILE, contents.sub(match[0], replacement))
+    end
+
+    def format_release_date(date)
+      "#{date.strftime('%B')} #{date.day}#{ordinal_suffix(date.day)}, #{date.year}"
+    end
+
+    def ordinal_suffix(day)
+      return 'th' if (11..13).cover?(day % 100)
+
+      { 1 => 'st', 2 => 'nd', 3 => 'rd' }.fetch(day % 10, 'th')
+    end
+
+    def ensure_clean_worktree!
+      status = `git status --porcelain`
+      raise 'Git worktree must be clean before tagging' unless status.strip.empty?
+    end
+
+    def tag_exists?(tag_name)
+      system('git', 'rev-parse', '--verify', '--quiet', tag_name, out: File::NULL, err: File::NULL)
+    end
+  end
+
+  desc 'Updates version/changelog, commits the release, and tags VERSION=X.Y.Z'
+  task :tag do
+    ReleaseTagHelpers.release_version!
+
+    version = ENV['VERSION'].to_s.strip
+    puts
     puts "Tag v#{version} created. To publish, type the following:"
-    puts ""
+    puts
     puts "  bundle exec rake release:push VERSION=#{version}"
   end
 

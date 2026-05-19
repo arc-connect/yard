@@ -201,7 +201,7 @@ module YARD
 
       private
 
-      # @note this method fixes a bug in 1.9.2: http://gist.github.com/437136
+      # @note this method fixes a bug in 1.9.2: https://gist.github.com/437136
       def to_ary; nil end
 
       # Attempts to find the object that this unresolved object

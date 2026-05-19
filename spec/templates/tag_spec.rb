@@ -16,8 +16,8 @@ RSpec.describe YARD::Templates::Engine.template(:default, :tags) do
         # @raise [Exception] Exception class
         # @deprecated for great justice
         # @see A
-        # @see http://url.com
-        # @see http://url.com Example
+        # @see https://url.com
+        # @see https://url.com Example
         # @author Name
         # @since 1.0
         # @version 1.0

@@ -45,6 +45,20 @@ RSpec.describe "YARD::Handlers::Ruby::#{LEGACY_PARSER ? "Legacy::" : ""}MixinHan
     expect(P("ABC::DEF::BAR").mixins).to eq [P("ABC::BAR")]
   end
 
+  it "does not create self-referential mixin when bare name matches an ancestor namespace" do
+    # `include Inner` inside `Outer1::Inner` should not resolve to `Outer1::Inner` itself.
+    # Previously YARD would walk up to namespace `Outer1` and find `Outer1::Inner`,
+    # producing a false cyclic mixin. See https://github.com/lsegal/yard/issues/1116
+    mod = P("Outer1::Inner")
+    expect(mod.mixins.map(&:path)).not_to include("Outer1::Inner")
+    expect(mod.mixins.map(&:path)).to eq ["Inner"]
+    # inheritance_tree(true) should not recurse infinitely and should not
+    # include Outer1::Inner as a *mixin* (it appears only as self at index 0)
+    tree = mod.inheritance_tree(true)
+    expect(tree.first).to eq mod
+    expect(tree.drop(1).map(&:path)).not_to include("Outer1::Inner")
+  end
+
   it "raises undocumentable error if argument is variable" do
     undoc_error "module X; include invalid; end"
     expect(Registry.at('X').mixins).to eq []

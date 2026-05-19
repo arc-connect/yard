@@ -40,6 +40,7 @@ RSpec.describe YARD::Tags::ParseDirective do
       parser.file = "myfile.rb"
       parser.parse(StringIO.new(src))
       expect(Registry.at('A#foo').file).to eq 'myfile.rb'
+      expect(Registry.at('A#foo').source.strip).to eq 'eval "def foo; end"'
     end
   end
 end

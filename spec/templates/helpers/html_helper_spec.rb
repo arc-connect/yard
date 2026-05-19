@@ -118,7 +118,7 @@ RSpec.describe YARD::Templates::Helpers::HtmlHelper do
     end
 
     it "returns regular text with :text markup" do
-      expect(htmlify("fo\no\n\nbar<>", :text)).to eq "fo<br/>o<br/><br/>bar&lt;&gt;"
+      expect(htmlify("fo\no\n\nbar<>", :text)).to eq "fo<br>o<br><br>bar&lt;&gt;"
     end
 
     it "returns unmodified text with :none markup" do
@@ -147,22 +147,15 @@ RSpec.describe YARD::Templates::Helpers::HtmlHelper do
       log.enter_level(Logger::FATAL) do
         pending 'This test depends on markdown' unless markup_class(:markdown)
       end
-      expect(htmlify('{http://example.com Title}', :markdown).chomp).to match(
-        %r{<p><a href="http://example.com".*>Title</a></p>}
+      expect(htmlify('{https://example.com Title}', :markdown).chomp).to match(
+        %r{<p><a href="https://example.com".*>Title</a></p>}
       )
-      expect(htmlify('{http://example.com}', :markdown).chomp).to match(
-        %r{<p><a href="http://example.com".*>http://example.com</a></p>}
+      expect(htmlify('{https://example.com}', :markdown).chomp).to match(
+        %r{<p><a href="https://example.com".*>https://example.com</a></p>}
       )
     end
 
     it "creates tables (markdown specific)" do
-      log.enter_level(Logger::FATAL) do
-        supports_table = %w(RedcarpetCompat Kramdown::Document CommonMarker)
-        unless supports_table.include?(markup_class(:markdown).to_s)
-          pending "This test depends on a markdown engine that supports tables"
-        end
-      end
-
       markdown = <<-EOF.strip
         City    | State | Country
         --------|-------|--------
@@ -176,19 +169,15 @@ RSpec.describe YARD::Templates::Helpers::HtmlHelper do
       expect(html).to match %r{<td>NC</td>}
     end
 
-    it "handles fenced code blocks (Redcarpet specific)" do
-      log.enter_level(Logger::FATAL) do
-        unless markup_class(:markdown).to_s == 'RedcarpetCompat'
-          pending 'This test is Redcarpet specific'
-        end
-      end
-
+    it "handles fenced code blocks" do
       markdown = "Introduction:\n```ruby\nputs\n\nputs\n```"
       html = htmlify(markdown, :markdown)
       expect(html).to match %r{^<p>Introduction:</p>.*<code class="ruby">}m
     end
 
     it "sets env and env-yard attributes (AsciiDoc specific)" do
+      skip "Missing asciidoctor gem" if markup_class(:asciidoc).nil?
+
       adoc = <<-EOF.strip.gsub(/^ +/, "") # strip and unindent
         ifdef::env[]
         Attribute "env" is set, and its value is "{env}".
@@ -204,6 +193,8 @@ RSpec.describe YARD::Templates::Helpers::HtmlHelper do
     end
 
     it "should not include the document title from the AsciiDoc header" do
+      skip "Missing asciidoctor gem" if markup_class(:asciidoc).nil?
+
       adoc = <<-EOF.strip.gsub(/^ +/, "") # strip and unindent
         = Project Name
 
@@ -397,17 +388,17 @@ RSpec.describe YARD::Templates::Helpers::HtmlHelper do
       )
     end
 
-    it "creates regular links with http:// or https:// prefixes" do
-      expect(parse_link(resolve_links("{http://example.com}"))).to eq(
-        :inner_text => "http://example.com",
+    it "creates regular links with https:// prefix" do
+      expect(parse_link(resolve_links("{https://example.com}"))).to eq(
+        :inner_text => "https://example.com",
         :target => "_parent",
-        :href => "http://example.com",
-        :title => "http://example.com"
+        :href => "https://example.com",
+        :title => "https://example.com"
       )
-      expect(parse_link(resolve_links("{http://example.com title}"))).to eq(
+      expect(parse_link(resolve_links("{https://example.com title}"))).to eq(
         :inner_text => "title",
         :target => "_parent",
-        :href => "http://example.com",
+        :href => "https://example.com",
         :title => "title"
       )
     end
@@ -454,10 +445,10 @@ RSpec.describe YARD::Templates::Helpers::HtmlHelper do
     end
 
     it "resolves link with newline in title-part" do
-      expect(parse_link(resolve_links("{http://example.com foo\nbar}"))).to eq(
+      expect(parse_link(resolve_links("{https://example.com foo\nbar}"))).to eq(
         :inner_text => "foo bar",
         :target => "_parent",
-        :href => "http://example.com",
+        :href => "https://example.com",
         :title => "foo bar"
       )
     end
@@ -658,12 +649,36 @@ RSpec.describe YARD::Templates::Helpers::HtmlHelper do
         '<pre class="code foo"><code class="foo">x = 1</code></pre>'
       )
     end
+
+    it "does not re-escape already-highlighted code blocks embedded via {yard:include_tags}" do
+      # parse_codeblocks double-processing: when {yard:include_tags} embeds already-highlighted
+      # <pre class="example code"><code>HIGHLIGHTED</code></pre> blocks into a page, a second
+      # call to parse_codeblocks must not HTML-escape the span tags.
+      # Regression test for https://github.com/lsegal/yard/issues/1661
+      highlighted = "<span class='kw'>def</span> <span class='id identifier rubyid_foo'>foo</span>"
+      html = %(<pre class="example code"><code>#{highlighted}</code></pre>)
+      result = subject.htmlify(html, :html)
+      expect(result).not_to include('&lt;span')
+      expect(result).to include("<span class='kw'>def</span>")
+    end
+
+    it "does not re-escape already-highlighted code with leading whitespace (indented blocks)" do
+      # The rescue check in html_syntax_highlight_ruby_ripper was anchored with ^<span, which
+      # only matches when spans start at the beginning of a line. Leading spaces (e.g., from
+      # indented Ruby code like '  def foo') caused the check to fail and h(source) to be called.
+      # Regression test for https://github.com/lsegal/yard/issues/1661
+      highlighted = "  <span class='kw'>def</span> <span class='id identifier rubyid_foo'>foo</span>"
+      html = %(<pre class="example code"><code>#{highlighted}</code></pre>)
+      result = subject.htmlify(html, :html)
+      expect(result).not_to include('&lt;span')
+      expect(result).to include("<span class='kw'>def</span>")
+    end
   end
 
   describe "#link_url" do
     it "adds target if scheme is provided" do
-      expect(link_url("http://url.com")).to include(" target=\"_parent\"")
       expect(link_url("https://url.com")).to include(" target=\"_parent\"")
+      expect(link_url("http://url.com")).to include(" target=\"_parent\"")
       expect(link_url("irc://url.com")).to include(" target=\"_parent\"")
       expect(link_url("../not/scheme")).not_to include("target")
     end

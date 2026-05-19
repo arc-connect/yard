@@ -1,5 +1,54 @@
 # main
 
+# [0.9.43] - April 17th, 2026
+
+[0.9.43]: https://github.com/lsegal/yard/compare/v0.9.42...v0.9.43
+
+- Fix attribute registration in .rbs files (#1583)
+
+# [0.9.42] - April 16th, 2026
+
+[0.9.42]: https://github.com/lsegal/yard/compare/v0.9.41...v0.9.42
+
+- Fix alternating rows when loading a module in default HTML templates with subelements in the nav frame
+- Fix reliability of keypresses and copy/paste in search box (#1174)
+- Fix regression in `yard server` search box styling
+- Fix possible path traversal with document_root (`--docroot`) set in `yard server` ([GHSA-xfhh-rx56-rxcr](https://github.com/lsegal/yard/security/advisories/GHSA-xfhh-rx56-rxcr))
+
+# [0.9.41] - April 14th, 2026
+
+[0.9.41]: https://github.com/lsegal/yard/compare/v0.9.40...v0.9.41
+
+- Add support for `rdoc-image:...` syntax in HybridMarkup (#1676)
+- Add support for colon suffix code blocks in HybridMarkup (rdoc compatibility)
+- Fix responsiveness and state issues with nav frame links in `yard server`
+
+# [0.9.40] - April 12th, 2026
+
+[0.9.40]: https://github.com/lsegal/yard/compare/v0.9.39...v0.9.40
+
+- Add support for Ruby .rbs files (docstrings included) (#1673)
+- Add built-in hybrid RDoc/Markdown renderer (`HybridMarkdown`) requiring no external gems (#1674)
+- Add support for `#-` as a comment-block separator. See Getting Started Guide.
+- Add support for `commonmarker` version `>= 1.0`.
+- Remove usage of jQuery in default templates. jQuery library is still packaged in templates for backward compatibility (#1675)
+- Fix false self-referential mixin when bare name matches ancestor namespace (#1672)
+- Fix bracket/brace map corruption from Ruby 3.0+ pattern matching deconstruction (#1671)
+- Fix `@!scope class` on attributes (#1582, #1655, #1666)
+- Fix `@!parse` directives not including source for block (#1665)
+- Fix inherited methods not appearing in groups (#1656)
+
+# [0.9.39] - April 8th, 2026
+
+[0.9.39]: https://github.com/lsegal/yard/compare/v0.9.38...v0.9.39
+
+- Add support for Ruby 4.0 (#1663)
+- Add changelog URI to gemspec metadata (#1641)
+- Fix issues with source ranges (#1642)
+- Fix an issue loading relative links from file list in HTML template (#1660)
+- Various test fixes (#1650, #1651)
+
+
 # [0.9.38] - December 5th, 2025
 
 [0.9.38]: https://github.com/lsegal/yard/compare/v0.9.37...v0.9.38
@@ -847,7 +896,7 @@ contributions to this version.
 
 [0.4.0]: https://github.com/lsegal/yard/compare/v0.2.3.5...v0.4.0
 
-- Added new templating engine based on [tadpole](http://github.com/lsegal/tadpole)
+- Added new templating engine based on [tadpole](https://github.com/lsegal/tadpole)
 - Added YARD queries (`--query` CLI argument to yardoc)
 - Greatly expanded YARD documentation
 - Added plugin support

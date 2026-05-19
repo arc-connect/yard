@@ -507,7 +507,7 @@ module YARD
       #
       # @example
       #   # Synchronizes system time using NTP.
-      #   # @see http://ntp.org/documentation.html NTP Documentation
+      #   # @see https://ntp.org/documentation.html NTP Documentation
       #   # @see NTPHelperMethods
       #   class NTPUpdater; end
       define_tag "See Also",           :see,         :with_name
@@ -541,7 +541,7 @@ module YARD
       # @example
       #   # @todo Add support for Jabberwocky service.
       #   #   There is an open source Jabberwocky library available
-      #   #   at http://jbrwcky.org that can be easily integrated.
+      #   #   at https://jbrwcky.org that can be easily integrated.
       #   class Wonderlander; end
       # @see tag:note
       define_tag "Todo Item",          :todo
@@ -554,7 +554,7 @@ module YARD
       # of a specific object.
       #
       # @example
-      #   # The public REST API for http://jbrwcky.org
+      #   # The public REST API for https://jbrwcky.org
       #   # @version 2.0
       #   class JabberwockyAPI; end
       define_tag "Version",            :version

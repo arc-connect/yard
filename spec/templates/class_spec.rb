@@ -11,7 +11,7 @@ RSpec.describe YARD::Templates::Engine.template(:default, :docstring) do
       # @author Test
       # @version 1.0
       # @see A
-      # @see http://example.com Example
+      # @see https://example.com Example
       class A < B
         # HI
         def method_missing(*args) end

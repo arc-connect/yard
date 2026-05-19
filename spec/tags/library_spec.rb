@@ -7,7 +7,7 @@ RSpec.describe YARD::Tags::Library do
 
   describe "#see_tag" do
     it "takes a URL" do
-      expect(tag("@see http://example.com").name).to eq "http://example.com"
+      expect(tag("@see https://example.com").name).to eq "https://example.com"
     end
 
     it "takes an object path" do
@@ -15,8 +15,8 @@ RSpec.describe YARD::Tags::Library do
     end
 
     it "takes a description after the url/object" do
-      tag = tag("@see http://example.com An Example Site")
-      expect(tag.name).to eq "http://example.com"
+      tag = tag("@see https://example.com An Example Site")
+      expect(tag.name).to eq "https://example.com"
       expect(tag.text).to eq "An Example Site"
     end
   end

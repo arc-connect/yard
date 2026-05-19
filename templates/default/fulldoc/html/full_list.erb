@@ -2,9 +2,9 @@
 <html <%= "lang=\"#{html_lang}\"" unless html_lang.nil? %>>
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta charset="<%= charset %>" />
+    <meta charset="<%= charset %>">
     <% stylesheets_full_list.each do |stylesheet| %>
-      <link rel="stylesheet" href="<%= mtime_url(stylesheet) %>" type="text/css" media="screen" />
+      <link rel="stylesheet" href="<%= mtime_url(stylesheet) %>" type="text/css" media="screen">
     <% end %>
 
     <% javascripts_full_list.each do |javascript| %>
@@ -12,7 +12,7 @@
     <% end %>
 
     <title><%= @list_title %></title>
-    <base id="base_target" target="_parent" />
+    <base id="base_target" target="_parent">
   </head>
   <body>
     <div id="content">
@@ -28,7 +28,7 @@
 
         <div id="search">
           <label for="search-class">Search:</label>
-          <input id="search-class" type="text" />
+          <input id="search-class" type="text">
         </div>
       </div>
 

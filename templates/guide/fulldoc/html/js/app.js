@@ -1,33 +1,61 @@
-function generateTOC() {
-  if ($('#filecontents').length == 0) return;
-  var _toc = $('<ol class="top"></ol>');
-  var show = false;
-  var toc = _toc;
-  var counter = 0;
-  var tags = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'];
-  for (i in tags) { tags[i] = '#filecontents > ' + tags[i] }
-  var lastTag = parseInt(tags[0][1]);
-  $(tags.join(', ')).each(function() {
-    if (this.id == "filecontents") return;
-    show = true;
-    var thisTag = parseInt(this.tagName[1]);
-    if (this.id.length == 0) {
-      var proposedId = $(this).text().replace(/[^a-z0-9-]/ig, '_');
-      if ($('#' + proposedId).length > 0) proposedId += counter++;
-      this.id = proposedId;
-    }
-    if (thisTag > lastTag) {
-      for (var i = 0; i < thisTag - lastTag; i++) {
-        var tmp = $('<ol/>'); toc.append(tmp); toc = tmp;
-      }
-    }
-    if (thisTag < lastTag) {
-      for (var i = 0; i < lastTag - thisTag; i++) toc = toc.parent();
-    }
-    toc.append('<li><a href="#' + this.id + '">' + $(this).text() + '</a></li>');
-    lastTag = thisTag;
-  });
-  if (!show) return;
-  $('#toc').append()
-  $('#toc').append(_toc);
-}
+window.generateTOC = () => {
+	const fileContents = document.getElementById("filecontents");
+	const tocRoot = document.getElementById("toc");
+	const topLevel = document.createElement("ol");
+	let currentList = topLevel;
+	let lastLevel = 1;
+	let currentItem = null;
+	let counter = 0;
+	let hasEntries = false;
+
+	if (!fileContents || !tocRoot) return;
+
+	topLevel.className = "top";
+	const headings = fileContents.querySelectorAll(
+		":scope > h1, :scope > h2, :scope > h3, :scope > h4, :scope > h5, :scope > h6",
+	);
+
+	Array.prototype.forEach.call(headings, (heading) => {
+		let level;
+
+		if (heading.id === "filecontents") return;
+		hasEntries = true;
+		level = parseInt(heading.tagName.substring(1), 10);
+
+		if (!heading.id) {
+			let proposedId = heading.textContent.replace(/[^a-z0-9-]/gi, "_");
+			if (document.getElementById(proposedId)) proposedId += counter++;
+			heading.id = proposedId;
+		}
+
+		if (level > lastLevel) {
+			while (level > lastLevel) {
+				if (!currentItem) {
+					currentItem = document.createElement("li");
+					currentList.appendChild(currentItem);
+				}
+				const nestedList = document.createElement("ol");
+				currentItem.appendChild(nestedList);
+				currentList = nestedList;
+				currentItem = null;
+				lastLevel += 1;
+			}
+		} else if (level < lastLevel) {
+			while (level < lastLevel && currentList.parentElement) {
+				currentList = currentList.parentElement.parentElement;
+				lastLevel -= 1;
+			}
+		}
+
+		const item = document.createElement("li");
+		const link = document.createElement("a");
+		link.href = `#${heading.id}`;
+		link.textContent = heading.textContent;
+		item.appendChild(link);
+		currentList.appendChild(item);
+		currentItem = item;
+	});
+
+	if (!hasEntries) return;
+	tocRoot.appendChild(topLevel);
+};

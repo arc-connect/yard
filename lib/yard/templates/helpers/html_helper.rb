@@ -93,10 +93,16 @@ module YARD
                              :tables,
                              :with_toc_data,
                              :no_intraemphasis).to_html
+        when 'Commonmarker'
+          provider.to_html(text, :options => { }, :plugins => { :syntax_highlighter => nil })
         when 'CommonMarker'
-          CommonMarker.render_html(text, %i[DEFAULT GITHUB_PRE_LANG], %i[autolink table])
+          provider.render_html(text, %i[DEFAULT GITHUB_PRE_LANG], %i[autolink table])
         else
-          provider.new(text).to_html
+          if provider.respond_to?(:to_html)
+            provider.to_html(text)
+          else
+            provider.new(text).to_html
+          end
         end
       end
 
@@ -156,7 +162,7 @@ module YARD
       # @return [String] the output HTML
       # @since 0.6.0
       def html_markup_text(text)
-        h(text).gsub(/\r?\n/, '<br/>')
+        h(text).gsub(/\r?\n/, '<br>')
       end
 
       # @return [String] the same text with no markup
@@ -650,7 +656,12 @@ module YARD
           language ||= detect_lang_in_codeblock_attributes($1, $2)
           language ||= object.source_type
 
-          if options.highlight
+          # Skip re-highlighting if the block is already highlighted (e.g. from a recursive
+          # htmlify call via {include:} or {yard:include_tags}). Passing pre-highlighted HTML
+          # through CGI.unescapeHTML would corrupt deliberately-escaped entities inside spans.
+          # Note: this heuristic suppresses highlighting for code blocks in :html markup that
+          # contain a literal <span> tag in the source being documented (an uncommon edge case).
+          if options.highlight && string !~ HtmlSyntaxHighlightHelper::ALREADY_HIGHLIGHTED_RE
             string = html_syntax_highlight(CGI.unescapeHTML(string), language)
           end
           classes = ['code', language].compact.join(' ')

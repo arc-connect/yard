@@ -88,7 +88,7 @@ module YARD
         #   of status, headers, and body wrapped in an array.
         def call(request)
           self.request = request
-          self.path ||= request.path_info[1..-1]
+          self.path ||= File.cleanpath(request.path_info[1..-1])
           self.headers = {'Content-Type' => 'text/html'}
           self.body = ''
           self.status = 200

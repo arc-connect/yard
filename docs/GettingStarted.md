@@ -61,15 +61,41 @@ Using tags we can add semantic metadata to our code without worrying about
 presentation. YARD will handle presentation for us when we decide to generate
 documentation later.
 
+### Disconnecting Comment Blocks
+
+YARD attaches a comment block to the next relevant object by default. That is
+usually what you want, but file headers are a common exception. If you keep a
+copyright notice, license note or general file-level description at the top of
+the file, it can accidentally become the docstring for the first class or
+module unless you explicitly break the block.
+
+To disconnect the block, end the header with an attached `#-` line:
+
+    # Copyright (c) Example Corp
+    # Shared support code for the client layer.
+    #-
+
+    class Client
+    end
+
+In this example, the header comment is not attached to `Client`.
+
+This only works with `#-`. If you write `# -` with a space before the hyphen,
+YARD treats it as a normal comment line and it remains part of the docstring.
+
 ## Which Markup Format?
 
-YARD does not impose a specific markup. The above example uses standard RDoc
-markup formatting, but YARD also supports textile and markdown via the
-command-line switch or `.yardopts` file (see below). This means that you are
-free to use whatever formatting you like. This guide is actually written
-using markdown. YARD, however, does add a few important syntaxes that are
-processed no matter which markup formatting you use, such as tag support
-and inter-document linking. These syntaxes are discussed below.
+YARD does not impose a specific markup format. YARD ships with a builtin
+renderer that supports both RDoc and Markdown out of the box—no external gem
+required. You can use either format (or switch between them) without installing
+anything extra. YARD also supports textile, asciidoc, and other formats via
+optional gems.
+
+To select a markup format, use the command-line switch `-m FORMAT` or add
+`--markup FORMAT` to your `.yardopts` file. This guide is written in Markdown.
+YARD adds a few important syntaxes that are processed regardless of which
+markup format you choose, such as tag support and inter-document linking.
+These syntaxes are discussed below.
 
 ## Adding Tags to Documentation
 
@@ -182,7 +208,7 @@ Symbols:
 We mentioned that these type fields are "mostly" free-form. In truth, they
 are defined "by convention". To view samples of common type specifications
 and recommended conventions for writing type specifications, see
-[http://yardoc.org/types.html](http://yardoc.org/types.html). Note that these
+[https://yardoc.org/types.html](https://yardoc.org/types.html). Note that these
 conventions may change every now and then, although we are working on a more
 "formal" type specification proposal.
 
@@ -200,7 +226,7 @@ YARD will automatically wire up the correct method types and information
 by simply defining documentation in the `@return` tag. For example,
 the following declaration will show the correct information for the
 `waveform` attribute, both for the getter's return type and the
-setter's value parameter type: 
+setter's value parameter type:
 
     # @return [Numeric] the amplitude of the waveform
     attr_accessor :amplitude
@@ -248,7 +274,7 @@ The most common is the `attr_accessor` method, which of course has built-in
 support in YARD. However, frameworks and libraries often expose custom
 methods that perform similar metaprogramming tasks, and it is often useful
 to document their functionality in your application. Consider the `property`
-method in a project like [DataMapper](http://datamapper.org), which creates
+method in a project like [DataMapper](https://datamapper.org), which creates
 a typed attribute for a database model. The code might look like:
 
     class Post
@@ -386,11 +412,11 @@ If you want to use a Hash, prefix the first { with "!":
 
    # !{ :some_key => 'value' }
 
-### Linking URLs `{http://...}`
+### Linking URLs `{https://...}`
 
 URLs are also linked using this `{...}` syntax:
 
-    {http://example.com Optional Title}
+    {https://example.com Optional Title}
     {mailto:email@example.com}
 
 ### Linking Files `{file:...}`
@@ -672,8 +698,8 @@ not exist, so you may need to create it.
 You may find some useful YARD plugins on [RubyGems][RubyGemsQuery] or with
 a [Google advanced query][GoogleAdvancedQuery].
 
-[graphviz]:http://www.graphviz.org
-[yard-rspec]:http://github.com/lsegal/yard-spec-plugin
-[rspec]:http://rspec.info
+[graphviz]:https://www.graphviz.org
+[yard-rspec]:https://github.com/lsegal/yard-spec-plugin
+[rspec]:https://rspec.info
 [GoogleAdvancedQuery]:https://www.google.com/search?q=site%3Arubygems.org+intitle%3A%22yard-%22+OR+intitle%3A%22yard_%22
 [RubyGemsQuery]:https://rubygems.org/search?utf8=%E2%9C%93&query=name%3A+yard

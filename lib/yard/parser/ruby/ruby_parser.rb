@@ -244,6 +244,7 @@ module YARD
             sstart = child_node.source_range.first
           else
             lstart, sstart = *(map ? map.pop : [lineno, @ns_charno - 1])
+            (@map[:rbrace] ||= []).shift if map && MAPPINGS[node.type] == :lbrace
           end
 
           raise "Cannot determine start of node #{node} around #{file}:#{lineno}" if lstart.nil? || sstart.nil?
@@ -308,7 +309,7 @@ module YARD
             @heredoc_tokens << [token, data, [lineno, charno]]
 
             # fix ripper encoding of heredoc bug
-            # (see http://bugs.ruby-lang.org/issues/6200)
+            # (see https://bugs.ruby-lang.org/issues/6200)
             data.force_encoding(file_encoding) if file_encoding
 
             @heredoc_state = :ended if token == :heredoc_end
@@ -336,6 +337,7 @@ module YARD
         undef on_aref_field
         undef on_lbracket
         undef on_rbracket
+        undef on_rbrace
         undef on_string_literal
         undef on_lambda
         undef on_unary
@@ -369,6 +371,20 @@ module YARD
 
         def on_hash(*args)
           visit_event AstNode.new(:hash, args.first || [])
+        end
+
+        # Ruby 3.0+ pattern matching: braced hash patterns ({key: val} syntax) fire
+        # on_lbrace and on_rbrace scanner events. The corresponding parser event is
+        # on_hshptn (not on_hash), so we must clean up the brace maps to prevent stale
+        # entries from corrupting source ranges of later hash literals and brace blocks.
+        # Bare hash patterns (key: val without braces) fire no brace scanner events, so
+        # we only clean up when @map[:rbrace] confirms a closing brace was scanned.
+        def on_hshptn(*args)
+          if (@map[:rbrace] ||= []).any?
+            (@map[:lbrace] ||= []).pop
+            @map[:rbrace].shift
+          end
+          AstNode.new(:hshptn, args)
         end
 
         def on_bare_assoc_hash(*args)
@@ -422,6 +438,27 @@ module YARD
           node
         end
 
+        # Ruby 3.0+ pattern matching: array patterns (SomeClass[a, b]) and find patterns
+        # (SomeClass[*pre, val, *post]) use [...] brackets, which fire on_lbracket and
+        # on_rbracket scanner events. The corresponding parser events are on_aryptn/on_fndptn
+        # (not on_aref), so we must clean up the bracket maps to prevent stale entries from
+        # corrupting source ranges of later array indexing expressions.
+        def on_aryptn(*args)
+          (@map[:lbracket] ||= []).pop
+          (@map[:aref] ||= []).shift
+          # Source range is intentionally not set; no handler is registered for
+          # pattern-match nodes, so they produce no documentation output.
+          AstNode.new(:aryptn, args)
+        end
+
+        def on_fndptn(*args)
+          (@map[:lbracket] ||= []).pop
+          (@map[:aref] ||= []).shift
+          # Source range is intentionally not set; no handler is registered for
+          # pattern-match nodes, so they produce no documentation output.
+          AstNode.new(:fndptn, args)
+        end
+
         def on_lbracket(tok)
           (@map[:lbracket] ||= []) << [lineno, charno]
           visit_ns_token(:lbracket, tok, false)
@@ -430,6 +467,13 @@ module YARD
         def on_rbracket(tok)
           (@map[:aref] ||= []) << [lineno, charno]
           visit_ns_token(:rbracket, tok, false)
+        end
+
+        # Maintained explicitly (unlike on_lbracket/on_rbracket) so on_hshptn can
+        # distinguish braced from bare hash patterns in Ruby 3.0+ pattern matching.
+        def on_rbrace(tok)
+          (@map[:rbrace] ||= []) << [lineno, charno]
+          visit_ns_token(:rbrace, tok, false)
         end
 
         def on_dyna_symbol(sym)
@@ -625,6 +669,7 @@ module YARD
         alias compile_error on_parse_error
 
         def comment_starts_line?(charno)
+          return true if @source[charno] == "\n"
           (charno - 1).downto(0) do |i|
             ch = @source[i]
             break if ch == "\n"
@@ -702,6 +747,11 @@ module YARD
         def add_comment(line, node = nil, before_node = nil, into = false)
           comment = @comments[line]
           source_range = @comments_range[line]
+          if comment && source_range
+            source = @source[source_range]
+            last_line = source.lines.to_a.last
+            return if last_line && last_line =~ /^\s*\#-\s*$/
+          end
           line_range = ((line - comment.count("\n"))..line)
           if node.nil?
             node = CommentNode.new(:comment, [comment], :line => line_range, :char => source_range)

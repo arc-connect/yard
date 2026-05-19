@@ -71,7 +71,7 @@ module YARD
     #     def load_yardoc_from_http
     #       Thread.new do
     #         # zip/unzip method implementations are not shown
-    #         download_zip_file("http://mysite.com/yardocs/#{self}.zip")
+    #         download_zip_file("https://mysite.com/yardocs/#{self}.zip")
     #         unzip_file_to("/path/to/yardocs/#{self}")
     #       end
     #

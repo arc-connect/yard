@@ -133,8 +133,8 @@ You can do some of this as a non-maintainer too, but if you like this project,
 we can always use more hands on deck!
 
 [code]: https://github.com/lsegal/yard/blob/main/CODE_OF_CONDUCT.md
-[issues]: http://github.com/lsegal/yard/issues
-[commit]: http://chris.beams.io/posts/git-commit/
+[issues]: https://github.com/lsegal/yard/issues
+[commit]: https://chris.beams.io/posts/git-commit/
 [pr]: https://help.github.com/articles/using-pull-requests/
 [ml]: https://groups.google.com/forum/#!forum/yardoc
 [mail]: mailto:lsegal@soen.ca

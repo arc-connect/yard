@@ -1,5 +1,9 @@
 # main
 
+# [0.9.44] - May 25th, 2026
+
+[0.9.44]: https://github.com/lsegal/yard/compare/v0.9.43...v0.9.44
+
 - Fix possible path traversal with document_root (`--docroot`) and disk caching (`--cache`) set in `yard server` ([GHSA-pxcc-8665-phx8](https://github.com/lsegal/yard/security/advisories/GHSA-pxcc-8665-phx8))
 - Fix support for HTML entities in HybridMarkup (#1680, #1681)
 - Add support for string literals in TypesExplainer (#1628)

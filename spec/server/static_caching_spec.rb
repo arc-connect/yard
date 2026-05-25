@@ -37,6 +37,12 @@ RSpec.describe YARD::Server::StaticCaching do
       expect(check_static_cache).to eq nil
     end
 
+    it "does not read paths containing parent directory components" do
+      request.path_info = '/../secret'
+      expect(File).not_to receive(:file?)
+      expect(check_static_cache).to eq nil
+    end
+
     it "adds mount point to cache location" do
       request.path_info = '/hello/world.html'
       request.script_name = '/mount/point'

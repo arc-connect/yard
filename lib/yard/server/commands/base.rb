@@ -1,6 +1,4 @@
 # frozen_string_literal: true
-require 'fileutils'
-
 module YARD
   module Server
     module Commands
@@ -32,6 +30,8 @@ module YARD
       # @abstract
       # @see #run
       class Base
+        include StaticCaching
+
         # @group Basic Command and Adapter Options
 
         # @return [Hash] the options passed to the command's constructor
@@ -163,13 +163,7 @@ module YARD
         # @return [String] the same cached data (for chaining)
         # @see StaticCaching
         def cache(data)
-          if caching && adapter.document_root
-            path = File.join(adapter.document_root, request.path_info.sub(/\.html$/, '') + '.html')
-            path = path.sub(%r{/\.html$}, '.html')
-            FileUtils.mkdir_p(File.dirname(path))
-            log.debug "Caching data to #{path}"
-            File.open(path, 'wb') {|f| f.write(data) }
-          end
+          super if caching
           self.body = data
         end
 

@@ -36,6 +36,13 @@ RSpec.describe YARD::Server::Commands::Base do
       @command.request.path_info = '/path/to/file.html'
       @command.run
     end
+
+    it "does not cache paths containing parent directory components" do
+      expect(FileUtils).not_to receive(:mkdir_p)
+      expect(File).not_to receive(:open)
+      @command.request.path_info = '/../path/to/file.html'
+      @command.run
+    end
   end
 
   describe "#redirect" do
